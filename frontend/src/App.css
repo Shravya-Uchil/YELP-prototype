@@ -1,10 +1,21 @@
+.form-heading {
+  color: #fff;
+  font-size: 23px;
+}
+.panel h2 {
+  color: #444444;
+  font-size: 18px;
+  margin: 0 0 8px 0;
+}
+.panel p {
+  color: #777777;
+  font-size: 14px;
+  margin-bottom: 30px;
+  line-height: 24px;
+}
 
-.form-heading { color:#fff; font-size:23px;}
-.panel h2{ color:#444444; font-size:18px; margin:0 0 8px 0;}
-.panel p { color:#777777; font-size:14px; margin-bottom:30px; line-height:24px;}
-
-.login-link{
-  margin-top:10px;
+.login-link {
+  margin-top: 10px;
 }
 .login-form .form-control {
   background: #f7f7f7 none repeat scroll 0 0;
@@ -24,17 +35,19 @@
 }
 
 .login-form .form-group {
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
-.login-form{ text-align:center;}
+.login-form {
+  text-align: center;
+}
 .forgot a {
   color: #777777;
   font-size: 14px;
   text-decoration: underline;
 }
-.login-form  .btn.btn-primary {
-  background:#d32323 none repeat scroll 0 0;
-  border-color:#d32323;
+.login-form .btn.btn-primary {
+  background: #d32323 none repeat scroll 0 0;
+  border-color: #d32323;
   color: #ffffff;
   font-size: 14px;
   width: 100%;
@@ -43,48 +56,59 @@
   padding: 0;
 }
 
-.container .btn-success{
-  background:#d32323;
-  border-color:#d32323;
+.container .btn-success {
+  background: #d32323;
+  border-color: #d32323;
   width: 100%;
   font-size: 14px;
 }
 .forgot {
-  text-align: left; margin-bottom:30px;
+  text-align: left;
+  margin-bottom: 30px;
 }
 .botto-text {
   color: #ffffff;
   font-size: 14px;
   margin: auto;
 }
-.container-fluid{
-  background:#d32323;
-  border-color:#d32323;
+.container-fluid {
+  background: #d32323;
+  border-color: #d32323;
 }
-#nav-div a{
-  color:black;
+.container {
+  margin-top: 100px;
 }
-#login-link{
-  color:black;
+#nav-div a {
+  color: black;
 }
-#login-link:hover{
+#login-link {
+  color: black;
+}
+#login-link:hover {
   color: whitesmoke;
 }
-#login-icon span{
-  color:black;
+#login-icon span {
+  color: black;
 }
 ul#horizontal-list li {
   display: inline;
   /*color: white;*/
   text-align: center;
 }
-ul#horizontal-list li:hover{
+ul#horizontal-list li:hover {
   background-color: #111111;
 }
 
-h2#signup{
+h2#signup {
   color: #d32323;
 }
 
-.back { text-align: left; margin-top:10px;}
-.back a {color: #444444; font-size: 13px;text-decoration: none;}
+.back {
+  text-align: left;
+  margin-top: 10px;
+}
+.back a {
+  color: #444444;
+  font-size: 13px;
+  text-decoration: none;
+}
