@@ -12,6 +12,7 @@ class Navbar extends Component {
   //handle logout to destroy the cookie
   handleLogout = () => {
     console.log("Logout");
+    localStorage.clear();
     cookie.remove("cookie", { path: "/" });
   };
   render() {
@@ -21,6 +22,11 @@ class Navbar extends Component {
       console.log("Able to read cookie");
       navLogin = (
         <ul className="nav navbar-nav navbar-right" id="login-icon">
+          <li>
+            <Link to="/profile" id="login-link">
+              Profile
+            </Link>
+          </li>
           <li>
             <Link to="/" id="login-link" onClick={this.handleLogout}>
               <span className="glyphicon glyphicon-user"></span>Logout
@@ -50,10 +56,14 @@ class Navbar extends Component {
     return (
       <div>
         {redirectVar}
-        <nav className="navbar navbar-inverse navbar-fixed-top">
-          <div className="container-fluid">
+        <nav className="navbar navbar-inverse">
+          <div className="container-fluid" id="nav-fluid">
             <div className="navbar-header" id="nav-div">
-              <a className="navbar-brand">Yelp</a>
+              <a className="navbar-brand">
+                <Link to="/home" id="login-link">
+                  Yelp
+                </Link>
+              </a>
             </div>
             {navLogin}
           </div>

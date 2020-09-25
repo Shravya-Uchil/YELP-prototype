@@ -71,13 +71,11 @@
   font-size: 14px;
   margin: auto;
 }
-.container-fluid {
+#nav-fluid {
   background: #d32323;
   border-color: #d32323;
 }
-.container {
-  margin-top: 100px;
-}
+
 #nav-div a {
   color: black;
 }

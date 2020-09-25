@@ -9,7 +9,7 @@ class Home extends Component {
       redirectVar = <Redirect to="/login" />;
     }
     return (
-      <div className="container">
+      <div>
         {redirectVar}
         <div>
           <h1>Yelp</h1>

@@ -29,6 +29,7 @@ class Login extends Component {
       .then((response) => {
         console.log("Status Code : ", response.status);
         if (response.status === 200) {
+          localStorage.setItem("email_id", this.state.UEmail);
           this.props.history.replace("/home");
         } else {
           alert("status not 200!!!");
