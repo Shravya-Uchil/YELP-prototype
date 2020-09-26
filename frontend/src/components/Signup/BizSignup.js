@@ -2,10 +2,10 @@ import React, { Component } from "react";
 // import axios from "axios";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { customerSignup } from "../../actions/signupActions";
+import { restaurantSignup } from "../../actions/signupActions";
 import { Redirect } from "react-router";
 
-class Create extends Component {
+class RestaurantCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -18,22 +18,22 @@ class Create extends Component {
   };
 
   onSubmit = (e) => {
-    console.log("Submitting customer info");
+    console.log("Submitting restaurant info");
     //prevent page from refresh
     e.preventDefault();
-    console.log("P1:" + this.state.UPassword);
-    console.log("P2:" + this.state.UPasswordRe);
-    if (this.state.UPassword !== this.state.UPasswordRe) {
-      alert("Password miss match!!!");
+
+    if (this.state.password !== this.state.passwordRe) {
+      alert("Passwords do not match!!!");
       return;
     }
     const data = {
-      cust_name: this.state.UFName + " " + this.state.ULName,
-      email_id: this.state.UEmail,
-      password: this.state.UPassword,
+      restaurant_name: this.state.restName,
+      zip_code: this.state.zipcode,
+      email_id: this.state.email_id,
+      password: this.state.password,
     };
 
-    this.props.customerSignup(data);
+    this.props.restaurantSignup(data);
 
     this.setState({
       signupDone: 1,
@@ -58,21 +58,21 @@ class Create extends Component {
   render() {
     let redirectVar = null;
     let message = "";
-    console.log("Signup render");
+    console.log("Restaurant Signup render");
     console.log(this.props);
-    if (localStorage.getItem("customer_id")) {
+    if (localStorage.getItem("restaurant_id")) {
       redirectVar = <Redirect to="/Home" />;
     } else if (
-      this.props.customer === "CUSTOMER_ADDED" &&
+      this.props.restaurant === "RESTAURANT_ADDED" &&
       this.state.signupDone
     ) {
       alert("Registration successful!");
       redirectVar = <Redirect to="/Login" />;
     } else if (
-      this.props.customer === "CUSTOMER_EXISTS" &&
+      this.props.restaurant === "RESTAURANT_EXISTS" &&
       this.state.signupDone
     ) {
-      message = "Email id is already registered!";
+      message = "This Restaurant is already on Yelp!";
     }
     return (
       <div>
@@ -88,10 +88,10 @@ class Create extends Component {
                 <input
                   type="text"
                   class="form-control"
-                  name="UFName"
+                  name="restName"
                   onChange={this.onChange}
-                  id="UFName"
-                  placeholder="First Name"
+                  id="restName"
+                  placeholder="Restaurant Name"
                   required
                 />
               </div>
@@ -100,10 +100,10 @@ class Create extends Component {
                 <input
                   type="text"
                   class="form-control"
-                  name="ULName"
+                  name="zipcode"
                   onChange={this.onChange}
-                  id="ULName"
-                  placeholder="Last Name"
+                  id="zipcode"
+                  placeholder="Location (Enter Zip Code)"
                   required
                 />
               </div>
@@ -112,9 +112,9 @@ class Create extends Component {
                 <input
                   type="text"
                   class="form-control"
-                  name="UEmail"
+                  name="email_id"
                   onChange={this.onChange}
-                  id="UEmail"
+                  id="email_id"
                   placeholder="Email Id"
                   required
                 />
@@ -124,9 +124,9 @@ class Create extends Component {
                 <input
                   type="password"
                   class="form-control"
-                  name="UPassword"
+                  name="password"
                   onChange={this.onChange}
-                  id="UPassword"
+                  id="password"
                   placeholder="Password"
                   required
                 />
@@ -136,10 +136,10 @@ class Create extends Component {
                 <input
                   type="password"
                   class="form-control"
-                  name="UPasswordRe"
+                  name="passwordRe"
                   onChange={this.onChange}
-                  id="UPasswordRe"
-                  placeholder="Re enter Password"
+                  id="passwordRe"
+                  placeholder="Re Enter Password"
                   required
                 />
               </div>
@@ -159,13 +159,13 @@ class Create extends Component {
   }
 }
 
-Create.propTypes = {
-  customerSignup: PropTypes.func.isRequired,
-  customer: PropTypes.object.isRequired,
+RestaurantCreate.propTypes = {
+  restaurantSignup: PropTypes.func.isRequired,
+  restaurant: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  customer: state.signup.customer,
+  restaurant: state.signup.restaurant,
 });
 
-export default connect(mapStateToProps, { customerSignup })(Create);
+export default connect(mapStateToProps, { restaurantSignup })(RestaurantCreate);

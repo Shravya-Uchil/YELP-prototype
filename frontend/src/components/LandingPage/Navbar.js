@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
+import { customerLogout } from "../../actions/loginActions";
+import { connect } from "react-redux";
 
 //create the Navbar Component
 class Navbar extends Component {
@@ -12,8 +14,8 @@ class Navbar extends Component {
   //handle logout to destroy the cookie
   handleLogout = () => {
     console.log("Logout");
-    localStorage.clear();
     cookie.remove("cookie", { path: "/" });
+    this.props.customerLogout();
   };
   render() {
     //if Cookie is set render Logout Button
@@ -73,4 +75,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default connect(null, { customerLogout })(Navbar);

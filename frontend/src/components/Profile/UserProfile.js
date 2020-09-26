@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import axios from "axios";
-/*import PropTypes from "prop-types";
+// import axios from "axios";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import backendServer from "../../webConfig";
 import {
-  getCustomer,
-  updateCustomer,
-} from "../../actions/customerProfileActions";*/
+  getCustomerDetails,
+  updateCustomerDetails,
+} from "../../actions/customerProfileActions";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -29,9 +28,8 @@ class CustomerProfile extends Component {
   }
 
   componentWillMount() {
-    console.log("We are here, emailid is" + localStorage.getItem("email_id"));
-    console.log('${localStorage.getItem("user_id")}');
-    axios
+    console.log("We are here, emailid is " + localStorage.getItem("email_id"));
+    /*axios
       .get(
         `http://localhost:3001/yelp/profile/customer/${localStorage.getItem(
           "email_id"
@@ -59,7 +57,34 @@ class CustomerProfile extends Component {
       .catch((error) => {
         console.log("error:");
         console.log(error);
-      });
+      });*/
+    this.props.getCustomerDetails();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("We in props received, next prop is: ", nextProps);
+    if (nextProps.customer) {
+      var { customer } = nextProps;
+
+      var customerData = {
+        //customer_id: customer.customer_id,
+        cust_name: customer.cust_name || this.state.cust_name,
+        email_id: customer.email_id || this.state.email_id,
+        city: customer.city || this.state.city,
+        state: customer.state || this.state.state,
+        country: customer.country || this.state.country,
+        // address: customer.address,
+        //phone_number: customer.phone_number,
+        cust_image: customer.cust_image || this.state.cust_image,
+        password: customer.password || this.state.password,
+        //dob: customer.dob,
+        nick_name: customer.nick_name || this.state.nick_name,
+        headline: customer.headline || this.state.headline,
+        //yelp_since: customer.yelp_since,
+        //things_love: customer.things_love,
+      };
+      this.setState(customerData);
+    }
   }
 
   onChange = (e) => {
@@ -71,7 +96,7 @@ class CustomerProfile extends Component {
   onUpdate = (e) => {
     //prevent page from refresh
     e.preventDefault();
-    axios.defaults.withCredentials = true;
+    /*axios.defaults.withCredentials = true;
     let data = Object.assign({}, this.state);
     axios
       .post(`http://localhost:3001/yelp/profile/customer`, data)
@@ -82,7 +107,9 @@ class CustomerProfile extends Component {
       .catch((error) => {
         console.log("Error");
         console.log(error);
-      });
+      });*/
+    let data = Object.assign({}, this.state);
+    this.props.updateCustomerDetails(data);
   };
 
   render() {
@@ -144,6 +171,7 @@ class CustomerProfile extends Component {
                       required={true}
                       value={this.state.cust_name}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -155,6 +183,7 @@ class CustomerProfile extends Component {
                       type="date"
                       value={this.state.dob}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -162,10 +191,11 @@ class CustomerProfile extends Component {
                   <Form.Group as={Col} controlId="city">
                     <Form.Label>City</Form.Label>
                     <Form.Control
-                      name="address"
+                      name="city"
                       type="text"
-                      value={this.state.address}
+                      value={this.state.city}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -173,10 +203,11 @@ class CustomerProfile extends Component {
                   <Form.Group as={Col} controlId="state">
                     <Form.Label>State</Form.Label>
                     <Form.Control
-                      name="address"
+                      name="state"
                       type="text"
-                      value={this.state.address}
+                      value={this.state.state}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -184,10 +215,11 @@ class CustomerProfile extends Component {
                   <Form.Group as={Col} controlId="country">
                     <Form.Label>Country</Form.Label>
                     <Form.Control
-                      name="address"
+                      name="country"
                       type="text"
-                      value={this.state.address}
+                      value={this.state.country}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -199,6 +231,7 @@ class CustomerProfile extends Component {
                       type="text"
                       value={this.state.nick_name}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -210,6 +243,7 @@ class CustomerProfile extends Component {
                       type="text"
                       value={this.state.headline}
                       onChange={this.onChange}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -234,6 +268,8 @@ class CustomerProfile extends Component {
                       onChange={this.onChange}
                       placeholder="New Password"
                       value={this.state.password}
+                      required={true}
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -260,17 +296,17 @@ class CustomerProfile extends Component {
     );
   }
 }
-export default CustomerProfile;
-/*CustomerProfile.propTypes = {
-  getCustomer: PropTypes.func.isRequired,
-  updateCustomer: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+CustomerProfile.propTypes = {
+  getCustomerDetails: PropTypes.func.isRequired,
+  updateCustomerDetails: PropTypes.func.isRequired,
+  customer: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  user: state.customerProfile.user,
+  customer: state.customerProfile.customer,
 });
 
-export default connect(mapStateToProps, { getCustomer, updateCustomer })(
-  CustomerProfile
-);*/
+export default connect(mapStateToProps, {
+  getCustomerDetails,
+  updateCustomerDetails,
+})(CustomerProfile);

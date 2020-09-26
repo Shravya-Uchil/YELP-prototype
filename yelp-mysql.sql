@@ -25,6 +25,22 @@ CREATE TABLE `customer` (
   UNIQUE KEY `customer_id_UNIQUE` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
+-- Restaurant persona table structure
+
+CREATE TABLE `restaurant` (
+  `restaurant_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `restaurant_name` varchar(100) NOT NULL,
+  `email_id` varchar(255) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `zip_code` int NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `contact` varchar(45) DEFAULT NULL,
+  `open_time` time DEFAULT NULL,
+  `close_time` time DEFAULT NULL,
+  PRIMARY KEY (`restaurant_id`),
+  UNIQUE KEY `restaurant_id_UNIQUE` (`restaurant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Mysqlpwd123';
 flush privileges;
 
@@ -50,26 +66,33 @@ END //
 
 DELIMITER ;
 
-DELIMITER //
+DROP procedure IF EXISTS `get_user`;
+
+DELIMITER $$
+USE `yelp`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user`(
 	p_email_id VARCHAR(100)
 )
 BEGIN
 	IF EXISTS(SELECT customer_id FROM customer WHERE email_id = p_email_id) THEN
-		SELECT customer_id, email_id, password, cust_name, address, phone_number, cust_image, headline, nick_name, 1 AS status FROM customer WHERE email_id = p_email_id;
+		SELECT customer_id, email_id, password, cust_name, city, state, country, phone_number, cust_image, headline, nick_name, 1 AS status FROM customer WHERE email_id = p_email_id;
 	ELSE
 		SELECT 0 AS status;
 	END IF;        
-END //
+END$$
 
 DELIMITER ;
 
-DELIMITER //
+DROP procedure IF EXISTS `update_customer`;
+
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_customer`(
 	_email_id VARCHAR(255),
     _cust_name VARCHAR(45),
     _password VARCHAR(100),
-    _address VARCHAR(255),
+    _city VARCHAR(100),
+    _state VARCHAR(100),
+    _country VARCHAR(100),
     _nick_name VARCHAR(45),
     _headline VARCHAR(255),
     _things_love VARCHAR(255)
@@ -81,7 +104,7 @@ BEGIN
     IF _customer_id IS NOT NULL THEN
     BEGIN
 		UPDATE customer
-		SET cust_name  = _cust_name , email_id = _email_id, address = _address, nick_name = _nick_name, headline = _headline, things_love = _things_love
+		SET cust_name  = _cust_name , email_id = _email_id, city = _city, state = _state, country = _country, nick_name = _nick_name, headline = _headline, things_love = _things_love
 		WHERE customer_id = _customer_id;
         
         IF _password != _exiting_password THEN
@@ -94,6 +117,31 @@ BEGIN
     ELSE
 		SELECT 'NO_RECORD' AS status;
     END IF;
-END //
+END$$
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `register_restaurant`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `register_restaurant`(
+	_restaurant_name VARCHAR(100),
+	_zip_code INT,
+	_email_id VARCHAR(100),
+    _password VARCHAR(100)
+)
+BEGIN
+	DECLARE p_restaurant_id INT;
+	SELECT restaurant_id INTO p_restaurant_id FROM restaurant WHERE email_id = _email_id;
+
+	IF p_restaurant_id IS NULL THEN
+		INSERT INTO restaurant (restaurant_name, email_id, password, zip_code)
+		VALUES (_restaurant_name, _email_id, _password, _zip_code);
+        
+        SELECT 'RESTAURANT_ADDED' as status;
+    ELSE
+		SELECT restaurant_id, 'RESTAURANT_EXISTS' AS status FROM restaurant WHERE email_id = _email_id;
+    END IF;
+END$$
 
 DELIMITER ;

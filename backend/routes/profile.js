@@ -33,7 +33,7 @@ router.post("/customer", (req, res) => {
     }*/
   console.log("Update Customer");
   console.log(req.body);
-  let sql = `CALL update_customer('${req.body.email_id}', '${req.body.cust_name}', '${req.body.password}', '${req.body.address}', '${req.body.nick_name}', '${req.body.headline}', 'shravya');`;
+  let sql = `CALL update_customer('${req.body.email_id}', '${req.body.cust_name}', '${req.body.password}', '${req.body.city}', '${req.body.state}', '${req.body.country}', '${req.body.nick_name}', '${req.body.headline}', 'shravya');`;
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -47,6 +47,7 @@ router.post("/customer", (req, res) => {
       result.length > 0 &&
       result[0][0].status === "CUSTOMER_UPDATED"
     ) {
+      console.log("Success");
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -56,6 +57,8 @@ router.post("/customer", (req, res) => {
       result.length > 0 &&
       result[0][0].status === "NO_RECORD"
     ) {
+      console.log("401");
+      console.log(result);
       res.writeHead(401, {
         "Content-Type": "text/plain",
       });

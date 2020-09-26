@@ -24,10 +24,16 @@ router.post("/", (req, res) => {
           httpOnly: false,
           path: "/",
         });
+        let customerObject = {
+          customer_id: result[0][0].customer_id,
+          cust_name: result[0][0].name,
+          email_id: result[0][0].email_id,
+          password: result[0][0].password,
+        };
         res.writeHead(200, {
           "Content-Type": "text/plain",
         });
-        res.end("Logged in");
+        res.end(JSON.stringify(customerObject));
       } else {
         res.writeHead(401, {
           "Content-Type": "text/plain",
@@ -38,7 +44,7 @@ router.post("/", (req, res) => {
       res.writeHead(401, {
         "Content-Type": "text/plain",
       });
-      res.end("NO_USER");
+      res.end("NO_CUSTOMER");
     }
   });
 });
