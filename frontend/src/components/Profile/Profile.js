@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 
-class Home extends Component {
+class Profile extends Component {
   render() {
     let redirectVar = null;
     if (localStorage.getItem("customer_id")) {
-      redirectVar = <Redirect to="/customerhome" />;
+      redirectVar = <Redirect to="/customerprofile" />;
     } else if (localStorage.getItem("restaurant_id")) {
-      redirectVar = <Redirect to="/restauranthome" />;
+      redirectVar = <Redirect to="/restaurantprofile" />;
     } else {
       redirectVar = <Redirect to="/login" />;
     }
-    console.log("here " + redirectVar);
     return <div>{redirectVar}</div>;
   }
 }
 //export Home Component
-export default Home;
+export default Profile;

@@ -61,13 +61,13 @@ class RestaurantCreate extends Component {
     console.log("Restaurant Signup render");
     console.log(this.props);
     if (localStorage.getItem("restaurant_id")) {
-      redirectVar = <Redirect to="/Home" />;
+      redirectVar = <Redirect to="/home" />;
     } else if (
       this.props.restaurant === "RESTAURANT_ADDED" &&
       this.state.signupDone
     ) {
       alert("Registration successful!");
-      redirectVar = <Redirect to="/Login" />;
+      redirectVar = <Redirect to="/login" />;
     } else if (
       this.props.restaurant === "RESTAURANT_EXISTS" &&
       this.state.signupDone

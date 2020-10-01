@@ -5,7 +5,11 @@ import Navbar from "./LandingPage/Navbar";
 import Signup from "./Signup/Signup";
 import BizSignup from "./Signup/BizSignup";
 import Home from "./Home/Home";
-import Profile from "./Profile/UserProfile";
+import CustomerHome from "./Home/CustomerHome";
+import RestaurantHome from "./Home/RestaurantHome";
+import CustomerProfile from "./Profile/UserProfile";
+import RestaurantProfile from "./Profile/RestaurantProfile";
+import Profile from "./Profile/Profile";
 //Create a Main Component
 class Main extends Component {
   render() {
@@ -16,7 +20,11 @@ class Main extends Component {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/home" component={Home} />
+        <Route path="/customerhome" component={CustomerHome} />
+        <Route path="/restauranthome" component={RestaurantHome} />
         <Route path="/profile" component={Profile} />
+        <Route path="/customerprofile" component={CustomerProfile} />
+        <Route path="/restaurantprofile" component={RestaurantProfile} />
         <Route path="/bizsignup" component={BizSignup} />
       </div>
     );

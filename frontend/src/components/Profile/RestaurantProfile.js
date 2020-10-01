@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-// import axios from "axios";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-  getCustomerDetails,
-  updateCustomerDetails,
-} from "../../actions/customerProfileActions";
-import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   Container,
   Col,
@@ -16,52 +9,43 @@ import {
   ButtonGroup,
   Card,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-class CustomerProfile extends Component {
+class RestaurantProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.onChange = this.onChange.bind(this);
-    //this.onImageChange = this.onImageChange.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
-    //this.onUpload = this.onUpload.bind(this);
   }
 
   componentWillMount() {
-    console.log("We are here, emailid is " + localStorage.getItem("email_id"));
-    /*axios
+    axios
       .get(
-        `http://localhost:3001/yelp/profile/customer/${localStorage.getItem(
-          "email_id"
+        `http://localhost:3001/yelp/profile/restaurant/${localStorage.getItem(
+          "restaurant_id"
         )}`
       )
       .then((response) => {
-        console.log("Response:", response.data[0]);
-        var userData = {
-          //user_id: user.user_id || this.state.user_id,
-          cust_name: response.data[0].cust_name,
-          email_id: response.data[0].email_id,
-          address: response.data[0].address,
-          //phone_number: response.data[0].phone_number,
-          cust_image: response.data[0].cust_image,
-          password: response.data[0].password,
-          //dob: response.data[0].dob,
-          nick_name: response.data[0].nick_name,
-          headline: response.data[0].headline,
-          //yelp_since: response.data[0].yelp_since,
-          //things_love: response.data[0].things_love,
+        var resData = {
+          restaurant_id: response.data[0].restaurant_id,
+          restaurant_name:
+            response.data[0].restaurant_name || this.state.restaurant_name,
+          email_id: response.data[0].email_id || this.state.email_id,
+          contact: response.data[0].contact || this.state.contact,
+          description: response.data[0].description || this.state.description,
+          zip_code: response.data[0].zip_code || this.state.zip_code,
         };
-        this.setState(userData);
+        this.setState(resData);
         console.log("State:", this.state);
       })
       .catch((error) => {
         console.log("error:");
         console.log(error);
-      });*/
-    this.props.getCustomerDetails();
+      });
   }
 
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
     console.log("We in props received, next prop is: ", nextProps);
     if (nextProps.customer) {
       var { customer } = nextProps;
@@ -76,6 +60,7 @@ class CustomerProfile extends Component {
         // address: customer.address,
         //phone_number: customer.phone_number,
         cust_image: customer.cust_image || this.state.cust_image,
+        password: customer.password || this.state.password,
         //dob: customer.dob,
         nick_name: customer.nick_name || this.state.nick_name,
         headline: customer.headline || this.state.headline,
@@ -84,7 +69,7 @@ class CustomerProfile extends Component {
       };
       this.setState(customerData);
     }
-  }
+  }*/
 
   onChange = (e) => {
     this.setState({
@@ -95,44 +80,49 @@ class CustomerProfile extends Component {
   onUpdate = (e) => {
     //prevent page from refresh
     e.preventDefault();
-    /*axios.defaults.withCredentials = true;
+    axios.defaults.withCredentials = true;
     let data = Object.assign({}, this.state);
     axios
-      .post(`http://localhost:3001/yelp/profile/customer`, data)
+      .post(`http://localhost:3001/yelp/profile/restaurant`, data)
       .then((response) => {
-        console.log("Updated");
-        alert("Updated profile");
+        console.log("Updated done");
+        console.log(response);
+        if (response.status === 200 && response.data === "RESTAURANT_UPDATED") {
+          console.log("Updated");
+          alert("Updated profile");
+          document.getElementById("update").blur();
+        }
       })
       .catch((error) => {
         console.log("Error");
         console.log(error);
-      });*/
-    let data = Object.assign({}, this.state);
-    this.props.updateCustomerDetails(data);
-    document.getElementById("update").blur();
+      });
   };
 
   render() {
-    var imageSrc = "http://localhost:3001/yelp/images/user/user_profile.png";
+    var imageSrc =
+      "http://localhost:3001/yelp/images/restaurant/restaurant_default.jpg";
     return (
       <div>
         <Container fluid={true}>
           <Row>
             <Col>
               <center>
+                <br />
+                <br />
                 <Card style={{ width: "18rem" }}>
                   <Card.Img
                     variant="top"
                     src={imageSrc}
-                    style={{ height: "5vw" }}
+                    style={{ height: "15rem" }}
                   />
                   <Card.Body>
                     <Card.Title>
-                      <h3>{this.state.cust_name}</h3>
+                      <h3>{this.state.restaurant_name}</h3>
                     </Card.Title>
                   </Card.Body>
                 </Card>
-                <form onSubmit={this.onUpload}>
+                <form onSubmit="">
                   <br />
                   <br />
                   <div class="custom-file" style={{ width: "80%" }}>
@@ -165,89 +155,27 @@ class CustomerProfile extends Component {
                   <Form.Group as={Col} controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
-                      name="cust_name"
+                      name="restaurant_name"
                       type="text"
+                      onChange={this.onChange}
+                      value={this.state.restaurant_name}
                       pattern="^[A-Za-z0-9 ]+$"
                       required={true}
-                      value={this.state.cust_name}
-                      onChange={this.onChange}
-                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                  <Form.Group as={Col} controlId="dob">
-                    <Form.Label>Date Of Birth</Form.Label>
+                  <Form.Group as={Col} controlId="desc">
+                    <Form.Label>Description</Form.Label>
                     <Form.Control
-                      name="dob"
-                      type="date"
-                      value={this.state.dob}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="city">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      name="city"
+                      name="description"
                       type="text"
-                      value={this.state.city}
                       onChange={this.onChange}
-                      autocomplete="off"
+                      value={this.state.description}
+                      pattern="^[A-Za-z ]+$"
                     />
                   </Form.Group>
                 </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="state">
-                    <Form.Label>State</Form.Label>
-                    <Form.Control
-                      name="state"
-                      type="text"
-                      value={this.state.state}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="country">
-                    <Form.Label>Country</Form.Label>
-                    <Form.Control
-                      name="country"
-                      type="text"
-                      value={this.state.country}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="nickname">
-                    <Form.Label>Nickname</Form.Label>
-                    <Form.Control
-                      name="nick_name"
-                      type="text"
-                      value={this.state.nick_name}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="headline">
-                    <Form.Label>Headline</Form.Label>
-                    <Form.Control
-                      name="headline"
-                      type="text"
-                      value={this.state.headline}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-
                 <Form.Row>
                   <Form.Group as={Col} controlId="email_id">
                     <Form.Label>Email</Form.Label>
@@ -260,6 +188,31 @@ class CustomerProfile extends Component {
                   </Form.Group>
                 </Form.Row>
                 <Form.Row>
+                  <Form.Group as={Col} controlId="zip_code">
+                    <Form.Label>ZIP Code</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="zip_code"
+                      onChange={this.onChange}
+                      value={this.state.zip_code}
+                      pattern="^[0-9]+"
+                      required={true}
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                  <Form.Group as={Col} controlId="contact">
+                    <Form.Label>Contact Info</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="contact"
+                      onChange={this.onChange}
+                      value={this.state.contact}
+                      required={true}
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row>
                   <Form.Group as={Col} controlId="RB.password">
                     <Form.Label>Change Password</Form.Label>
                     <Form.Control
@@ -267,12 +220,9 @@ class CustomerProfile extends Component {
                       name="password"
                       onChange={this.onChange}
                       placeholder="New Password"
-                      required={true}
-                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
-
                 <ButtonGroup aria-label="Third group">
                   <Button
                     type="submit"
@@ -285,28 +235,15 @@ class CustomerProfile extends Component {
                 </ButtonGroup>
                 {"  "}
                 <ButtonGroup aria-label="Fourth group">
-                  <Link to="/login">Cancel</Link>
+                  <Link to="/home">Cancel</Link>
                 </ButtonGroup>
               </Form>
             </Col>
           </Row>
-          <br />
         </Container>
       </div>
     );
   }
 }
-CustomerProfile.propTypes = {
-  getCustomerDetails: PropTypes.func.isRequired,
-  updateCustomerDetails: PropTypes.func.isRequired,
-  customer: PropTypes.object.isRequired,
-};
 
-const mapStateToProps = (state) => ({
-  customer: state.customerProfile.customer,
-});
-
-export default connect(mapStateToProps, {
-  getCustomerDetails,
-  updateCustomerDetails,
-})(CustomerProfile);
+export default RestaurantProfile;

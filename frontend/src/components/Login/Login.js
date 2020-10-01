@@ -21,13 +21,14 @@ class Login extends Component {
 
   submitLogin = (e) => {
     e.preventDefault();
+    let typeVal = document.getElementById("login_type").value;
+
     let data = Object.assign({}, this.state);
     /*const data = {
       email_id: this.state.email_id,
       password: this.state.password,
     };*/
-
-    this.props.customerLogin(data);
+    this.props.customerLogin(data, typeVal);
     this.setState({
       loginDoneOnce: 1,
     });
@@ -71,9 +72,17 @@ class Login extends Component {
     let message = "";
     let redirectVar = null;
     if (this.props.customer && this.props.customer.customer_id) {
-      localStorage.setItem("email_id", this.props.customer.email_id);
-      localStorage.setItem("customer_id", this.props.customer.customer_id);
-      redirectVar = <Redirect to="/home" />;
+      if (this.props.customer.login_type === 0) {
+        localStorage.setItem("email_id", this.props.customer.email_id);
+        localStorage.setItem("customer_id", this.props.customer.customer_id);
+        localStorage.setItem("login_type", "customer");
+        redirectVar = <Redirect to="/home" />;
+      } else {
+        localStorage.setItem("email_id", this.props.customer.email_id);
+        localStorage.setItem("restaurant_id", this.props.customer.customer_id);
+        localStorage.setItem("login_type", "restaurant");
+        redirectVar = <Redirect to="/home" />;
+      }
     } else if (
       this.props.customer === "NO_CUSTOMER" &&
       this.state.loginDoneOnce
@@ -92,12 +101,19 @@ class Login extends Component {
           <div class="login-form">
             <div class="main-div">
               <div class="panel">
-                <h2>User Login</h2>
+                <h2>Login</h2>
                 <p>Please enter your username and password</p>
               </div>
               <form onSubmit={this.submitLogin}>
                 <div style={{ color: "#ff0000" }}>{message}</div>
                 <br />
+                <div class="form-group">
+                  Choose login type:
+                  <select id="login_type" name="type">
+                    <option value="Customer">Customer</option>
+                    <option value="Restaurant">Restaurant</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <input
                     type="text"

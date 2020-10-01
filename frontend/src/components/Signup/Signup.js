@@ -61,13 +61,13 @@ class Create extends Component {
     console.log("Signup render");
     console.log(this.props);
     if (localStorage.getItem("customer_id")) {
-      redirectVar = <Redirect to="/Home" />;
+      redirectVar = <Redirect to="/home" />;
     } else if (
       this.props.customer === "CUSTOMER_ADDED" &&
       this.state.signupDone
     ) {
       alert("Registration successful!");
-      redirectVar = <Redirect to="/Login" />;
+      redirectVar = <Redirect to="/login" />;
     } else if (
       this.props.customer === "CUSTOMER_EXISTS" &&
       this.state.signupDone

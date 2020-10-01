@@ -46,21 +46,21 @@ flush privileges;
 
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `register_customer`(
-	_name VARCHAR(45),
-	_email_id VARCHAR(255),
-	_password VARCHAR(100)
+    _name VARCHAR(45),
+    _email_id VARCHAR(255),
+    _password VARCHAR(100)
 )
 BEGIN
-	DECLARE p_customer_id INT;
-	SELECT customer_id INTO p_customer_id FROM customer WHERE email_id = _email_id;
+    DECLARE p_customer_id INT;
+    SELECT customer_id INTO p_customer_id FROM customer WHERE email_id = _email_id;
 
-	IF p_customer_id IS NULL THEN
-		INSERT INTO customer (cust_name, email_id, password)
-		VALUES (_name, _email_id, _password);
-        
-        SELECT 'USER_ADDED' as status;
+    IF p_customer_id IS NULL THEN
+        INSERT INTO customer (cust_name, email_id, password)
+        VALUES (_name, _email_id, _password);
+
+        SELECT 'CUSTOMER_ADDED' as status;
     ELSE
-		SELECT customer_id, 'USER_EXISTS' AS status FROM customer WHERE email_id = _email_id;
+        SELECT customer_id, 'CUSTOMER_EXISTS' AS status FROM customer WHERE email_id = _email_id;
     END IF;
 END //
 
@@ -71,14 +71,14 @@ DROP procedure IF EXISTS `get_user`;
 DELIMITER $$
 USE `yelp`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user`(
-	p_email_id VARCHAR(100)
+    p_email_id VARCHAR(100)
 )
 BEGIN
-	IF EXISTS(SELECT customer_id FROM customer WHERE email_id = p_email_id) THEN
-		SELECT customer_id, email_id, password, cust_name, city, state, country, phone_number, cust_image, headline, nick_name, 1 AS status FROM customer WHERE email_id = p_email_id;
-	ELSE
-		SELECT 0 AS status;
-	END IF;        
+    IF EXISTS(SELECT customer_id FROM customer WHERE email_id = p_email_id) THEN
+        SELECT customer_id, email_id, password, cust_name, city, state, country, phone_number, cust_image, headline, nick_name, 1 AS status FROM customer WHERE email_id = p_email_id;
+    ELSE
+        SELECT 0 AS status;
+    END IF;
 END$$
 
 DELIMITER ;
@@ -87,7 +87,7 @@ DROP procedure IF EXISTS `update_customer`;
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_customer`(
-	_email_id VARCHAR(255),
+    _email_id VARCHAR(255),
     _cust_name VARCHAR(45),
     _password VARCHAR(100),
     _city VARCHAR(100),
@@ -98,24 +98,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_customer`(
     _things_love VARCHAR(255)
 )
 BEGIN
-	DECLARE _customer_id varchar(255);
+    DECLARE _customer_id varchar(255);
     DECLARE _exiting_password varchar(255);
-	SELECT customer_id, password INTO _customer_id, _exiting_password FROM customer WHERE email_id = _email_id;
+    SELECT customer_id, password INTO _customer_id, _exiting_password FROM customer WHERE email_id = _email_id;
     IF _customer_id IS NOT NULL THEN
     BEGIN
-		UPDATE customer
-		SET cust_name  = _cust_name , email_id = _email_id, city = _city, state = _state, country = _country, nick_name = _nick_name, headline = _headline, things_love = _things_love
-		WHERE customer_id = _customer_id;
-        
-        IF _password != _exiting_password THEN
-			UPDATE customer
+        UPDATE customer
+        SET cust_name  = _cust_name , email_id = _email_id, city = _city, state = _state, country = _country, nick_name = _nick_name, headline = _headline, things_love = _things_love
+        WHERE customer_id = _customer_id;
+
+        IF _password IS NOT NULL THEN
+            UPDATE customer
             SET password = _password
             WHERE customer_id = _customer_id;
-		END IF;
+        END IF;
         SELECT 'CUSTOMER_UPDATED' AS status;
-	END;
+    END;
     ELSE
-		SELECT 'NO_RECORD' AS status;
+        SELECT 'NO_RECORD' AS status;
     END IF;
 END$$
 
@@ -125,23 +125,91 @@ DROP procedure IF EXISTS `register_restaurant`;
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `register_restaurant`(
-	_restaurant_name VARCHAR(100),
-	_zip_code INT,
-	_email_id VARCHAR(100),
+    _restaurant_name VARCHAR(100),
+    _zip_code INT,
+    _email_id VARCHAR(100),
     _password VARCHAR(100)
 )
 BEGIN
-	DECLARE p_restaurant_id INT;
-	SELECT restaurant_id INTO p_restaurant_id FROM restaurant WHERE email_id = _email_id;
+    DECLARE p_restaurant_id INT;
+    SELECT restaurant_id INTO p_restaurant_id FROM restaurant WHERE email_id = _email_id;
 
-	IF p_restaurant_id IS NULL THEN
-		INSERT INTO restaurant (restaurant_name, email_id, password, zip_code)
-		VALUES (_restaurant_name, _email_id, _password, _zip_code);
+    IF p_restaurant_id IS NULL THEN
+        INSERT INTO restaurant (restaurant_name, email_id, password, zip_code)
+        VALUES (_restaurant_name, _email_id, _password, _zip_code);
         
         SELECT 'RESTAURANT_ADDED' as status;
     ELSE
-		SELECT restaurant_id, 'RESTAURANT_EXISTS' AS status FROM restaurant WHERE email_id = _email_id;
+        SELECT restaurant_id, 'RESTAURANT_EXISTS' AS status FROM restaurant WHERE email_id = _email_id;
     END IF;
 END$$
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `get_restaurant`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_restaurant`(
+    p_email_id VARCHAR(100)
+)
+BEGIN
+    IF EXISTS(SELECT restaurant_id FROM restaurant WHERE email_id = p_email_id) THEN
+        SELECT restaurant_id, email_id, password, restaurant_name, zip_code, description, contact, open_time, close_time, 1 AS status FROM restaurant WHERE email_id = p_email_id;
+    ELSE
+        SELECT 0 AS status;
+    END IF;
+END
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `get_restaurant_byId`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_restaurant_byId`(
+    p_id INT
+)
+BEGIN
+    IF EXISTS(SELECT restaurant_id FROM restaurant WHERE restaurant_id = p_id) THEN
+        SELECT restaurant_id, email_id, password, restaurant_name, zip_code, description, contact, open_time, close_time, 1 AS status FROM restaurant WHERE restaurant_id = p_id;
+    ELSE
+        SELECT 0 AS status;
+    END IF;
+END
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `update_restaurant`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_restaurant`(
+    _restaurant_id VARCHAR(255),
+    _restaurant_name VARCHAR(45),
+    _password VARCHAR(100),
+    _zip_code INT,
+    _contact VARCHAR(100),
+    _description VARCHAR(100),
+    _open_time TIME,
+    _close_time TIME
+)
+BEGIN
+    DECLARE _exiting_password varchar(255);
+    IF EXISTS(SELECT restaurant_id FROM restaurant WHERE restaurant_id = _restaurant_id) THEN
+        SELECT password INTO _exiting_password FROM restaurant WHERE restaurant_id = _restaurant_id;
+        BEGIN
+            UPDATE restaurant
+            SET restaurant_name  = _restaurant_name , contact= _contact, zip_code = _zip_code, description = _description, open_time = _open_time, close_time = _close_time
+            WHERE restaurant_id = _restaurant_id;
+
+            IF _password IS NOT NULL THEN
+                UPDATE restaurant
+                SET password = _password
+                WHERE restaurant_id = _restaurant_id;
+            END IF;
+            SELECT 'RESTAURANT_UPDATED' AS status;
+        END;
+    ELSE
+        SELECT 'NO_RECORD' AS status;
+    END IF;
+END
 
 DELIMITER ;
