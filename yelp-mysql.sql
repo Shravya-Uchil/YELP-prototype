@@ -158,7 +158,7 @@ BEGIN
     ELSE
         SELECT 0 AS status;
     END IF;
-END
+END$$
 
 DELIMITER ;
 
@@ -174,7 +174,7 @@ BEGIN
     ELSE
         SELECT 0 AS status;
     END IF;
-END
+END$$
 
 DELIMITER ;
 
@@ -210,6 +210,36 @@ BEGIN
     ELSE
         SELECT 'NO_RECORD' AS status;
     END IF;
-END
+END$$
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `search_restaurants`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_restaurants`(
+	p_search_str VARCHAR(255)
+)
+BEGIN
+	DECLARE p_search_str_reg VARCHAR(255);
+    SET p_search_str_reg = CONCAT('%', p_search_str, '%');
+    
+    IF EXISTS(SELECT 
+        restaurant_id
+	FROM restaurant
+    WHERE restaurant_name LIKE p_search_str_reg
+    OR cuisine LIKE p_search_str_reg
+    OR description LIKE p_search_str_reg) THEN
+
+	SELECT DISTINCT 
+    restaurant_id, restaurant_name, zip_code, description, contact, open_time, close_time, cuisine, curbside_pickup, dine_in, yelp_delivery
+	FROM restaurant
+    WHERE restaurant_name LIKE p_search_str_reg
+    OR cuisine LIKE p_search_str_reg
+    OR description LIKE p_search_str_reg;
+    ELSE
+    SELECT 'NO_RECORD' AS result;
+    END IF;
+END$$
 
 DELIMITER ;

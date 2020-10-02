@@ -3,10 +3,9 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const db = require("../mysqlDB.js");
 
-router.get("/customer/:email_id", (req, res) => {
-  console.log("Get customer details for:");
-  console.log(req.params.email_id);
-  let sql_query = `CALL get_user('${req.params.email_id}');`;
+router.get("/search/:search_str", (req, res) => {
+  console.log("Get all resturants matching: " + req.params.search_str);
+  let sql_query = `CALL search_restaurants('${req.params.search_str}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
       console.log("Error:");

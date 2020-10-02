@@ -62,8 +62,13 @@ class RestaurantHome extends Component {
               </Card.Text>
               <br />
               <Card.Text>
+                <h4>Cuisine: {restaurant.cuisine}</h4>
+              </Card.Text>
+              <br />
+              <Card.Text>
                 <h4>Description: {restaurant.description}</h4>
               </Card.Text>
+              <br />
             </Card.Body>
           </Row>
         </Card>

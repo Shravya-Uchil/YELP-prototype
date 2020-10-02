@@ -17,6 +17,7 @@ class RestaurantProfile extends Component {
     this.state = {};
     this.onChange = this.onChange.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
   }
 
   componentWillMount() {
@@ -35,6 +36,12 @@ class RestaurantProfile extends Component {
           contact: response.data[0].contact || this.state.contact,
           description: response.data[0].description || this.state.description,
           zip_code: response.data[0].zip_code || this.state.zip_code,
+          curbside_pickup:
+            response.data[0].curbside_pickup || this.state.curbside_pickup,
+          dine_in: response.data[0].dine_in || this.state.dine_in,
+          yelp_delivery:
+            response.data[0].yelp_delivery || this.state.yelp_delivery,
+          cuisine: response.data[0].cuisine || this.state.cuisine,
         };
         this.setState(resData);
         console.log("State:", this.state);
@@ -77,11 +84,42 @@ class RestaurantProfile extends Component {
     });
   };
 
+  onRefresh = (e) => {
+    if (this.state.curbside_pickup) {
+      document.getElementById("curbside_pickup").checked = true;
+    }
+    if (this.state.dine_in) {
+      document.getElementById("dine_in").checked = true;
+    }
+    if (this.state.yelp_delivery) {
+      document.getElementById("yelp_delivery").checked = true;
+    }
+  };
+
   onUpdate = (e) => {
     //prevent page from refresh
     e.preventDefault();
     axios.defaults.withCredentials = true;
     let data = Object.assign({}, this.state);
+    if (document.getElementById("curbside_pickup").checked === true) {
+      data.curbside_pickup = 1;
+    } else {
+      data.curbside_pickup = 0;
+    }
+
+    if (document.getElementById("dine_in").checked === true) {
+      data.dine_in = 1;
+    } else {
+      data.dine_in = 0;
+    }
+
+    if (document.getElementById("yelp_delivery").checked === true) {
+      data.yelp_delivery = 1;
+    } else {
+      data.yelp_delivery = 0;
+    }
+    console.log("data");
+    console.log(data);
     axios
       .post(`http://localhost:3001/yelp/profile/restaurant`, data)
       .then((response) => {
@@ -102,6 +140,7 @@ class RestaurantProfile extends Component {
   render() {
     var imageSrc =
       "http://localhost:3001/yelp/images/restaurant/restaurant_default.jpg";
+    this.onRefresh();
     return (
       <div>
         <Container fluid={true}>
@@ -213,6 +252,49 @@ class RestaurantProfile extends Component {
                   </Form.Group>
                 </Form.Row>
                 <Form.Row>
+                  <Form.Group as={Col} controlId="cuisine">
+                    <Form.Label>Cuisine</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="cuisine"
+                      onChange={this.onChange}
+                      value={this.state.cuisine}
+                      required={true}
+                      placeholder="american, indian, chinese"
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                  <Form.Group as={Col} controlId="delivery">
+                    <Form.Label>Delivery type</Form.Label>
+                    <br />
+                    Curbside Pickup
+                    <input
+                      type="checkbox"
+                      name="curbside_pickup"
+                      id="curbside_pickup"
+                      value="curbside_pickup"
+                      style={{ margin: "0 10px 0 3px" }}
+                    />
+                    Dine in
+                    <input
+                      type="checkbox"
+                      name="dine_in"
+                      id="dine_in"
+                      value="dine_in"
+                      style={{ margin: "0 10px 0 3px" }}
+                    />
+                    Yelp Delivery
+                    <input
+                      type="checkbox"
+                      name="yelp_delivery"
+                      id="yelp_delivery"
+                      value="yelp_delivery"
+                      style={{ margin: "0 10px 0 3px" }}
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row>
                   <Form.Group as={Col} controlId="RB.password">
                     <Form.Label>Change Password</Form.Label>
                     <Form.Control
@@ -223,6 +305,7 @@ class RestaurantProfile extends Component {
                     />
                   </Form.Group>
                 </Form.Row>
+                <br />
                 <ButtonGroup aria-label="Third group">
                   <Button
                     type="submit"

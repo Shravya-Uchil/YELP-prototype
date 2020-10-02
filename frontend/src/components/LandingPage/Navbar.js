@@ -66,7 +66,7 @@ class Navbar extends Component {
           <div className="container-fluid" id="nav-fluid">
             <div className="navbar-header" id="nav-div">
               <a className="navbar-brand">
-                <Link to="/login" id="login-link">
+                <Link to="/home" id="login-link">
                   Yelp
                 </Link>
               </a>
