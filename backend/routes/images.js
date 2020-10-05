@@ -16,4 +16,8 @@ router.get("/restaurant/:restaurant_image", (req, res) => {
   );
 });
 
+router.get("/item/:item_image", (req, res) => {
+  res.sendFile(path.join(__dirname, "..") + "/public/uploads/item_default.jpg");
+});
+
 module.exports = router;

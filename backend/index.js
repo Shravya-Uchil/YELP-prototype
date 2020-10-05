@@ -55,6 +55,7 @@ const signup = require("./routes/signup");
 const images = require("./routes/images");
 const profile = require("./routes/profile");
 const restaurant = require("./routes/restaurant");
+const menu = require("./routes/menu");
 //const profile = require("./routes/profile");
 //const restaurant = require("./routes/restaurant");
 
@@ -63,6 +64,7 @@ app.use("/yelp/signup", signup);
 app.use("/yelp/images", images);
 app.use("/yelp/profile", profile);
 app.use("/yelp/restaurant", restaurant);
+app.use("/yelp/menu", menu);
 //app.use("/yelp/profile", profile);
 //app.use("/yelp/restaurant", restaurant);
 

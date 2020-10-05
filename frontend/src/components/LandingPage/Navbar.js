@@ -50,7 +50,7 @@ class Navbar extends Component {
       );
     }
     let redirectVar = null;
-    if (
+    /*if (
       localStorage.getItem("restaurant_id") ||
       localStorage.getItem("customer_id")
     ) {
@@ -58,14 +58,14 @@ class Navbar extends Component {
       redirectVar = <Redirect to="/home" />;
     } else {
       redirectVar = <Redirect to="/login" />;
-    }
+    }*/
     return (
       <div>
         {redirectVar}
-        <nav className="navbar navbar-inverse">
+        <nav className="navbar navbar-inverse" id="nav-fluid">
           <div className="container-fluid" id="nav-fluid">
             <div className="navbar-header" id="nav-div">
-              <a className="navbar-brand">
+              <a className="navbar-brand navbar-left">
                 <Link to="/home" id="login-link">
                   Yelp
                 </Link>

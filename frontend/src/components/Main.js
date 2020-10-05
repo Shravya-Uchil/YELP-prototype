@@ -10,13 +10,14 @@ import RestaurantHome from "./Home/RestaurantHome";
 import CustomerProfile from "./Profile/UserProfile";
 import RestaurantProfile from "./Profile/RestaurantProfile";
 import Profile from "./Profile/Profile";
+import Restaurant from "./Restaurant/Restaurant";
 //Create a Main Component
 class Main extends Component {
   render() {
     return (
       <div>
         {/*Render Different Component based on Route*/}
-        <Route path="/" component={Navbar} />
+        <Route exact path="/" component={Navbar} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/home" component={Home} />
@@ -26,6 +27,7 @@ class Main extends Component {
         <Route path="/customerprofile" component={CustomerProfile} />
         <Route path="/restaurantprofile" component={RestaurantProfile} />
         <Route path="/bizsignup" component={BizSignup} />
+        <Route path="/restaurant" component={Restaurant} />
       </div>
     );
   }

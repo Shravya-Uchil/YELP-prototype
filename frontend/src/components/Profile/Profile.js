@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
+import NavBar from "../LandingPage/Navbar.js";
 
 class Profile extends Component {
   render() {
@@ -11,7 +12,12 @@ class Profile extends Component {
     } else {
       redirectVar = <Redirect to="/login" />;
     }
-    return <div>{redirectVar}</div>;
+    return (
+      <div>
+        <NavBar />
+        {redirectVar}
+      </div>
+    );
   }
 }
 //export Home Component

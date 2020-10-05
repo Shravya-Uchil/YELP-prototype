@@ -1,18 +1,28 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
+import CustomerHome from "./CustomerHome.js";
+import RestaurantHome from "./RestaurantHome.js";
+import NavBar from "../LandingPage/Navbar.js";
 
 class Home extends Component {
   render() {
     let redirectVar = null;
+    let home = null;
+
     if (localStorage.getItem("customer_id")) {
-      redirectVar = <Redirect to="/customerhome" />;
+      home = <CustomerHome />;
     } else if (localStorage.getItem("restaurant_id")) {
-      redirectVar = <Redirect to="/restauranthome" />;
+      home = <RestaurantHome />;
     } else {
-      redirectVar = <Redirect to="/login" />;
+      redirectVar = <Redirect to="/" />;
     }
-    console.log("here " + redirectVar);
-    return <div>{redirectVar}</div>;
+    return (
+      <div>
+        {redirectVar}
+        <NavBar />
+        {home}
+      </div>
+    );
   }
 }
 //export Home Component

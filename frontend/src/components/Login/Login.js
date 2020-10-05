@@ -5,6 +5,7 @@ import { Redirect } from "react-router";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { customerLogin } from "../../actions/loginActions";
+import NavBar from "../LandingPage/Navbar.js";
 
 //Define a Login Component
 class Login extends Component {
@@ -97,6 +98,7 @@ class Login extends Component {
     return (
       <div>
         {redirectVar}
+        <NavBar />
         <div class="container">
           <div class="login-form">
             <div class="main-div">

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { customerSignup } from "../../actions/signupActions";
 import { Redirect } from "react-router";
+import NavBar from "../LandingPage/Navbar.js";
 
 class Create extends Component {
   constructor(props) {
@@ -77,7 +78,7 @@ class Create extends Component {
     return (
       <div>
         {redirectVar}
-
+        <NavBar />
         <div>
           <br />
           <div className="container">
