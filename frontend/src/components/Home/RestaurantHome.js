@@ -3,6 +3,7 @@ import cookie from "react-cookies";
 import { Redirect } from "react-router";
 import { Card, Container, Col, Form, Row } from "react-bootstrap";
 import axios from "axios";
+import Reviews from "../Restaurant/RestaurantReview.js";
 
 class RestaurantHome extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class RestaurantHome extends Component {
   render() {
     let redirectVar = null;
     let restaurantDetails = null;
+    let reviews = null;
     if (!cookie.load("cookie")) {
       redirectVar = <Redirect to="/login" />;
     }
@@ -39,14 +41,18 @@ class RestaurantHome extends Component {
         "http://localhost:3001/yelp/images/restaurant/restaurant_default.png";
       restaurantDetails = (
         <Card
-          bg="info"
-          text="white"
-          style={{ width: "70rem", height: "15rem", margin: "2%" }}
+          bg="light"
+          text="dark"
+          style={{
+            width: "70rem",
+            height: "20rem",
+            margin: "2%",
+          }}
         >
           <Row>
             <Col>
               <Card.Img
-                style={{ width: "18rem", height: "15rem" }}
+                style={{ width: "20rem", height: "20rem" }}
                 src={resImageSrc}
               />
             </Col>
@@ -73,6 +79,7 @@ class RestaurantHome extends Component {
           </Row>
         </Card>
       );
+      reviews = <Reviews restaurant_details={restaurant} />;
     }
     return (
       <div>
@@ -81,6 +88,7 @@ class RestaurantHome extends Component {
           <Container className="justify-content">
             <br />
             {restaurantDetails}
+            {reviews}
           </Container>
         </div>
       </div>

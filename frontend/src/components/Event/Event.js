@@ -1,29 +1,29 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
+import CustomerEvent from "./CustomerEvent.js";
+import RestaurantEvent from "./RestaurantEvent.js";
 import NavBar from "../LandingPage/Navbar.js";
-import CustomerProfile from "./UserProfile.js";
-import RestaurantProfile from "./RestaurantProfile.js";
 
-class Profile extends Component {
+class Event extends Component {
   render() {
     let redirectVar = null;
-    let profile = null;
+    let event = null;
+    console.log("Events");
     if (localStorage.getItem("customer_id")) {
-      profile = <CustomerProfile />;
+      event = <CustomerEvent />;
     } else if (localStorage.getItem("restaurant_id")) {
-      profile = <RestaurantProfile />;
+      event = <RestaurantEvent />;
     } else {
-      redirectVar = <Redirect to="/" />;
+      redirectVar = <Redirect to="/login" />;
     }
     return (
       <div>
         {redirectVar}
         <NavBar />
-        <br />
-        {profile}
+        {event}
       </div>
     );
   }
 }
 //export Home Component
-export default Profile;
+export default Event;

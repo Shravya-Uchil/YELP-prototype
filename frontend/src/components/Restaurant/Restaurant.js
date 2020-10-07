@@ -2,9 +2,20 @@ import React, { Component } from "react";
 import { Redirect } from "react-router";
 import axios from "axios";
 import ItemCard from "./Item";
-import { Button, Card, Container, Col, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Container,
+  Col,
+  Row,
+  Form,
+  ButtonGroup,
+  ButtonToolbar,
+} from "react-bootstrap";
 import cookie from "react-cookies";
 import NavBar from "../LandingPage/Navbar.js";
+import { Link } from "react-router-dom";
+import StarRatings from "react-star-ratings";
 
 class Restaurant extends Component {
   constructor(props) {
@@ -12,13 +23,17 @@ class Restaurant extends Component {
     this.setState({
       menu_category: [],
       menu_items: [],
+      review_rating: 0,
     });
     this.ItemsForCategory = this.ItemsForCategory.bind(this);
     this.getAllMenuItems = this.getAllMenuItems.bind(this);
     this.getAllCategories = this.getAllCategories.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.changeRating = this.changeRating.bind(this);
     this.getAllMenuItems().then((ret) => {
       this.getAllCategories();
     });
+    this.onAdd = this.onAdd.bind(this);
     console.log("End constructor");
   }
 
@@ -105,6 +120,48 @@ class Restaurant extends Component {
     }
   };
 
+  onChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  changeRating = (newRating, name) => {
+    this.setState({
+      [name]: newRating,
+    });
+  };
+
+  onAdd = (e) => {
+    //prevent page from refresh
+    e.preventDefault();
+    axios.defaults.withCredentials = true;
+    if (this.props.location.state) {
+      var data = {
+        restaurant_id: this.props.location.state.restaurant_id,
+        customer_id: localStorage.getItem("customer_id"),
+        review_text: this.state.review_text,
+        review_rating: this.state.review_rating || 0,
+      };
+    }
+
+    //var data = Object.assign({}, this.state);
+    console.log("Add review");
+    console.log(data);
+    axios
+      .post(`http://localhost:3001/yelp/restaurant/restaurantReview`, data)
+      .then((response) => {
+        alert("Review Added!");
+        this.setState({
+          isAddDone: 1,
+        });
+      })
+      .catch((error) => {
+        console.log("Error");
+        console.log(error);
+      });
+  };
+
   render() {
     console.log("render");
     if (!cookie.load("cookie")) {
@@ -142,20 +199,30 @@ class Restaurant extends Component {
         menuTag.push(category);
       }
     }
+    console.log("render");
+    console.log(this.state);
+    let rating = 0;
+    if (this.state && this.state.review_rating) {
+      rating = this.state.review_rating;
+    }
+    let isReviewAdded = false;
+    if (this.state && this.state.isAddDone) {
+      isReviewAdded = true;
+    }
     return (
       <div>
         {redirectVar}
         <NavBar />
         <Container>
           <Card
-            bg="info"
-            text="white"
-            style={{ width: "70rem", height: "15rem", margin: "2%" }}
+            bg="light"
+            text="dark"
+            style={{ width: "70rem", height: "20rem", margin: "2%" }}
           >
             <Row>
               <Col>
                 <Card.Img
-                  style={{ width: "18rem", height: "15rem" }}
+                  style={{ width: "20rem", height: "20rem" }}
                   src={
                     "http://localhost:3001/yelp/images/restaurant/restaurant_default.png"
                   }
@@ -182,6 +249,45 @@ class Restaurant extends Component {
               </Card.Body>
             </Row>
           </Card>
+          <Form onSubmit={this.onAdd}>
+            <StarRatings
+              rating={rating}
+              starRatedColor="#d32323"
+              changeRating={this.changeRating}
+              numberOfStars={5}
+              name="review_rating"
+            />
+            <Form.Row>
+              <Form.Group as={Col} controlId="addreview">
+                <Form.Label>Write review</Form.Label>
+                <Form.Control
+                  name="review_text"
+                  as="textarea"
+                  onChange={this.onChange}
+                  autocomplete="off"
+                  rows={3}
+                />
+              </Form.Group>
+            </Form.Row>
+            <div className="d-flex flex-row">
+              <Button
+                type="submit"
+                style={{ background: "#d32323" }}
+                id="add"
+                disabled={isReviewAdded}
+              >
+                Add Review
+              </Button>
+              {"   "}
+              <Link to={{ pathname: "/restaurantreview", state: restaurant }}>
+                <Button name="view_review" style={{ background: "#d32323" }}>
+                  View Reviews
+                </Button>
+              </Link>
+            </div>
+            {"  "}
+          </Form>
+          <br />
           <Container>{menuTag}</Container>
         </Container>
         <center>

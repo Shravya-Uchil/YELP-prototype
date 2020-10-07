@@ -145,16 +145,12 @@ class RestaurantProfile extends Component {
       <div>
         <Container fluid={true}>
           <Row>
-            <Col>
+            <Col xs={6} md={4}>
               <center>
                 <br />
                 <br />
                 <Card style={{ width: "18rem" }}>
-                  <Card.Img
-                    variant="top"
-                    src={imageSrc}
-                    style={{ height: "15rem" }}
-                  />
+                  <Card.Img variant="top" src={imageSrc} />
                   <Card.Body>
                     <Card.Title>
                       <h3>{this.state.restaurant_name}</h3>

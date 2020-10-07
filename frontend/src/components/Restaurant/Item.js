@@ -35,7 +35,6 @@ class Item extends Component {
   addToCart = (e) => {
     let item_id = this.props.menu_item.item_id;
     let cartList = [];
-
     if (
       parseInt(localStorage.getItem("selected_restaurant_id")) !==
       this.props.menu_item.restaurant_id
@@ -46,7 +45,6 @@ class Item extends Component {
     if (localStorage.getItem("cart_list")) {
       cartList.push(...JSON.parse(localStorage.getItem("cart_list")));
     }
-
     let index = cartList.findIndex((cart) => cart.item_id === item_id);
     if (index === -1) {
       cartList.push({
@@ -56,6 +54,14 @@ class Item extends Component {
         item_name: this.props.menu_item.item_name,
       });
       //localStorage.setItem("cart_res_id", this.props.menu_item.res_id);
+      localStorage.setItem("cart_list", JSON.stringify(cartList));
+      this.setState({
+        showModal: false,
+        itemQty: 1,
+      });
+    } else {
+      cartList[index].item_quantity =
+        cartList[index].item_quantity + this.state.itemQty;
       localStorage.setItem("cart_list", JSON.stringify(cartList));
       this.setState({
         showModal: false,
@@ -72,12 +78,20 @@ class Item extends Component {
       cartList.push(...JSON.parse(localStorage.getItem("cart_list")));
     }
 
+    console.log(cartList);
     let index = cartList.findIndex((cart) => cart.item_id === item_id);
+    console.log("remove");
+    console.log(index);
+    console.log(item_id);
+    console.log(cartList);
     if (index !== -1) {
+      console.log("removing");
       cartList.splice(index, 1);
+      console.log(cartList);
       localStorage.setItem("cart_items", JSON.stringify(cartList));
       this.setState({
-        itemQty: 0,
+        showModal: false,
+        itemQty: 1,
       });
     }
   };
@@ -103,7 +117,7 @@ class Item extends Component {
     if (this.state) {
       showModal = this.state.showModal;
     }
-
+    console.log("Modal: " + showModal);
     return (
       <div>
         <Card bg="white" style={{ width: "50rem", margin: "2%" }}>
@@ -127,25 +141,34 @@ class Item extends Component {
             <Col align="right">
               <br />
               <br />
-              <Button
-                variant="primary"
-                onClick={this.openModal}
-                name={this.props.menu_item.item_id}
-              >
-                Add to Cart
-              </Button>
-              &nbsp; &nbsp;
-              <Button
-                variant="primary"
-                onClick={this.removeFromCart}
-                name={this.props.menu_item.item_id}
-              >
-                Remove from Cart
-              </Button>
+              <div className="d-flex flex-row">
+                <Button
+                  variant="primary"
+                  onClick={this.openModal}
+                  name={this.props.menu_item.item_id}
+                  style={{ background: "#d32323" }}
+                >
+                  Add to Cart
+                </Button>
+                &nbsp; &nbsp;
+                <Button
+                  variant="primary"
+                  onClick={this.removeFromCart}
+                  name={this.props.menu_item.item_id}
+                  style={{ background: "#d32323" }}
+                >
+                  Remove from Cart
+                </Button>
+              </div>
             </Col>
           </Row>
         </Card>
-        <Modal show={showModal} onHide={this.onClose} centered>
+        <Modal
+          show={showModal}
+          onHide={this.onClose}
+          centered
+          animation={false}
+        >
           <Modal.Header closeButton>
             <Modal.Title>{this.props.menu_item.item_name}</Modal.Title>
           </Modal.Header>
@@ -166,17 +189,27 @@ class Item extends Component {
                 width="10%"
                 onChange={this.onQuantityChange}
                 defaultValue="1"
-                autofocus
+                autoFocus
               ></input>
             </center>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.onClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={this.addToCart}>
-              Add to Cart
-            </Button>
+            <div className="d-flex flex-row">
+              <Button
+                variant="secondary"
+                onClick={this.onClose}
+                style={{ background: "#d32323" }}
+              >
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                onClick={this.addToCart}
+                style={{ background: "#d32323" }}
+              >
+                Add to Cart
+              </Button>
+            </div>
           </Modal.Footer>
         </Modal>
       </div>

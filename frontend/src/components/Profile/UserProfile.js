@@ -118,14 +118,10 @@ class CustomerProfile extends Component {
       <div>
         <Container fluid={true}>
           <Row>
-            <Col>
+            <Col xs={6} md={4}>
               <center>
                 <Card style={{ width: "18rem" }}>
-                  <Card.Img
-                    variant="top"
-                    src={imageSrc}
-                    style={{ height: "5vw" }}
-                  />
+                  <Card.Img variant="top" src={imageSrc} />
                   <Card.Body>
                     <Card.Title>
                       <h3>{this.state.cust_name}</h3>

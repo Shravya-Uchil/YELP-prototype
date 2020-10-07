@@ -20,4 +20,10 @@ router.get("/item/:item_image", (req, res) => {
   res.sendFile(path.join(__dirname, "..") + "/public/uploads/item_default.jpg");
 });
 
+router.get("/event/:event_image", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "..") + "/public/uploads/event_default.png"
+  );
+});
+
 module.exports = router;

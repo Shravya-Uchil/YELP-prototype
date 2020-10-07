@@ -6,17 +6,14 @@ import {
   InputGroup,
   FormControl,
   Button,
-  DropdownButton,
-  Dropdown,
   Alert,
   Col,
   Row,
 } from "react-bootstrap";
-import FontAwesomeIcon from "react-fontawesome";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-class CustomerHome extends Component {
+class CustomerEvent extends Component {
   constructor(props) {
     super(props);
     this.setState({
@@ -26,11 +23,43 @@ class CustomerHome extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
-    this.onCuisineSelect = this.onCuisineSelect.bind(this);
+    this.MyEvents = this.MyEvents.bind(this);
+    this.getRegisteredEvents = this.getRegisteredEvents.bind(this);
+    //this.onCuisineSelect = this.onCuisineSelect.bind(this);
+
+    this.getRegisteredEvents();
   }
+
+  getRegisteredEvents = () => {
+    axios
+      .get(
+        `http://localhost:3001/yelp/event/customer/registration/${localStorage.getItem(
+          "customer_id"
+        )}`
+      )
+      .then((response) => {
+        var cuisines = [];
+        console.log("registration response");
+        console.log(response.data);
+        if (response.data) {
+          if (response.data[0].result === "NO_RECORD") {
+            console.log("No registrations");
+          } else {
+            this.setState({
+              registrations: response.data,
+            });
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("Error");
+        console.log(error);
+      });
+  };
+
   componentDidMount() {
     axios
-      .get(`http://localhost:3001/yelp/restaurant/search/_`)
+      .get(`http://localhost:3001/yelp/event/all`)
       .then((response) => {
         var cuisines = [];
         console.log("response");
@@ -43,46 +72,17 @@ class CustomerHome extends Component {
             });
           } else {
             this.setState({
-              allRestaurants: response.data,
-              filteredRestaurants: response.data,
+              allEvents: response.data,
+              filteredEvents: response.data,
             });
           }
         }
-        console.log("state");
-        console.log(this.state);
       })
       .catch((error) => {
         console.log("Error");
         console.log(error);
       });
   }
-
-  onChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-      noRecords: false,
-    });
-  };
-
-  onCuisineSelect = (e) => {
-    let filter = e.target.text.replace(",", "");
-    filter = filter.replace(" ", "");
-    if (filter === "All") {
-      this.setState({
-        filteredRestaurants: this.state.allRestaurants,
-      });
-    } else {
-      var filteredList = this.state.allRestaurants.filter(
-        (restaurant) => restaurant.cuisine === filter
-      );
-      this.setState({
-        filteredRestaurants: filteredList,
-      });
-    }
-    if (filteredList.length === 0) {
-      this.setState({ noRecords: true });
-    }
-  };
 
   onSearch = (e) => {
     e.preventDefault();
@@ -94,18 +94,18 @@ class CustomerHome extends Component {
           ? "_"
           : this.state.search_input;
       axios
-        .get(`http://localhost:3001/yelp/restaurant/search/${searchInput}`)
+        .get(`http://localhost:3001/yelp/event/${searchInput}`)
         .then((response) => {
           if (response.data) {
             if (response.data[0].result === "NO_RECORD") {
               this.setState({
                 noRecord: true,
                 search_input: searchInput,
-                filteredRestaurants: this.state.allRestaurants,
+                filteredEvents: this.state.allEvents,
               });
             } else {
               this.setState({
-                filteredRestaurants: response.data,
+                filteredEvents: response.data,
                 noRecord: false,
                 search_input: "",
               });
@@ -119,59 +119,66 @@ class CustomerHome extends Component {
         });
     }
   };
+  onChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+      noRecords: false,
+    });
+  };
+
+  MyEvents = (e) => {
+    console.log("Myevents");
+    if (this.state.registrations) {
+      console.log("Here");
+      this.setState({
+        filteredEvents: this.state.registrations,
+      });
+    } else {
+      this.setState({
+        noRecords: true,
+      });
+    }
+  };
 
   render() {
-    let cuisineTag = null;
     let redirectVar = null;
     let messageTag = null;
-    let restaurantsTag = null;
+    let eventsTag = null;
+    let myEventsTag = null;
     if (!cookie.load("cookie")) {
       redirectVar = <Redirect to="/login" />;
     }
-    console.log("cust" + redirectVar);
-    let cusineList = [
-      "All, ",
-      "Pizza, ",
-      "Chinese, ",
-      "Indian, ",
-      "Mexican, ",
-      "American, ",
-      "Thai, ",
-      "Burgers, ",
-      "Italian, ",
-      "Stakehouse, ",
-      "Seafood, ",
-      "Korean, ",
-      "Japanese, ",
-      "Breakfast, ",
-      "Sushi, ",
-      "Vietnamese, ",
-      "Sandwiches",
-    ];
-    cuisineTag = cusineList.map((cuisine) => {
-      return (
-        <Dropdown.Item href="#" onClick={this.onCuisineSelect}>
-          {cuisine}
-        </Dropdown.Item>
-      );
-    });
-    if (this.state && this.state.filteredRestaurants) {
-      restaurantsTag = this.state.filteredRestaurants.map((restaurant) => {
+
+    myEventsTag = (
+      <Button
+        variant="success"
+        name="order"
+        onClick={this.MyEvents}
+        style={{ background: "#d32323" }}
+      >
+        Registered events
+      </Button>
+    );
+
+    if (this.state && this.state.filteredEvents) {
+      console.log("render");
+      eventsTag = this.state.filteredEvents.map((event) => {
+        console.log(event);
         return (
           <Col sm={3}>
-            <Link to={{ pathname: "/restaurant", state: restaurant }}>
-              <Card bg="white" style={{ width: "18rem", margin: "5%" }}>
+            <Card bg="white" style={{ width: "18rem" }}>
+              <Link to={{ pathname: "/eventdetails", state: event }}>
                 <Card.Img
                   variant="top"
                   style={{ height: "15rem" }}
-                  src="http://localhost:3001/yelp/images/restaurant/restaurant_default.png"
+                  src="http://localhost:3001/yelp/images/event/event_default.png"
                 />
-                <Card.Body>
-                  <Card.Title>{restaurant.restaurant_name}</Card.Title>
-                  <Card.Text>{restaurant.cuisine}</Card.Text>
-                </Card.Body>
-              </Card>
-            </Link>
+                <Card.Title>{event.event_name}</Card.Title>
+              </Link>
+              <Card.Body>
+                <Card.Text>{event.event_description}</Card.Text>
+              </Card.Body>
+            </Card>
           </Col>
         );
       });
@@ -182,6 +189,7 @@ class CustomerHome extends Component {
       messageTag = (
         <Alert variant="warning">No Results. Please try again.</Alert>
       );
+      eventsTag = null;
     }
 
     return (
@@ -190,13 +198,13 @@ class CustomerHome extends Component {
         <div>
           <center>
             <br />
-            <h3>Search for restaurants!</h3>
+            <h3>Search for Events!</h3>
             <br />
             <form onSubmit={this.onSearch}>
               <InputGroup style={{ width: "50%", display: "flex" }} size="lg">
                 <FormControl
-                  placeholder="Pizza, Indian, Italian..."
-                  aria-label="Search Restaurants"
+                  placeholder="Event..."
+                  aria-label="Search Events"
                   aria-describedby="basic-addon2"
                   name="search_input"
                   onChange={this.onChange}
@@ -211,21 +219,13 @@ class CustomerHome extends Component {
               </InputGroup>
               <br />
               <InputGroup style={{ width: "50%", display: "flex" }} size="lg">
-                <DropdownButton
-                  as={InputGroup.Append}
-                  variant="outline-secondary"
-                  title="Cuisine"
-                  id="input-group-dropdown-2"
-                  style={{ float: "right" }}
-                >
-                  {cuisineTag}
-                </DropdownButton>
+                {myEventsTag}
               </InputGroup>
             </form>
             <br />
             <br />
             {messageTag}
-            <Row>{restaurantsTag}</Row>
+            <Row>{eventsTag}</Row>
           </center>
         </div>
       </div>
@@ -233,4 +233,4 @@ class CustomerHome extends Component {
   }
 }
 //export Home Component
-export default CustomerHome;
+export default CustomerEvent;

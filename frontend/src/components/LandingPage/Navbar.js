@@ -23,10 +23,18 @@ class Navbar extends Component {
     if (cookie.load("cookie")) {
       console.log("Able to read cookie");
       navLogin = (
-        <ul className="nav navbar-nav navbar-right" id="login-icon">
+        <ul
+          className="nav navbar-nav navbar-right d-flex flex-row"
+          id="login-icon"
+        >
           <li>
             <Link to="/profile" id="login-link">
               Profile
+            </Link>
+          </li>
+          <li>
+            <Link to="/event" id="login-link">
+              Events
             </Link>
           </li>
           <li>
@@ -49,19 +57,8 @@ class Navbar extends Component {
         </ul>
       );
     }
-    let redirectVar = null;
-    /*if (
-      localStorage.getItem("restaurant_id") ||
-      localStorage.getItem("customer_id")
-    ) {
-      console.log("redirect to home");
-      redirectVar = <Redirect to="/home" />;
-    } else {
-      redirectVar = <Redirect to="/login" />;
-    }*/
     return (
       <div>
-        {redirectVar}
         <nav className="navbar navbar-inverse" id="nav-fluid">
           <div className="container-fluid" id="nav-fluid">
             <div className="navbar-header" id="nav-div">

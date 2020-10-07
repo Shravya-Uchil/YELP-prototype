@@ -11,6 +11,12 @@ import CustomerProfile from "./Profile/UserProfile";
 import RestaurantProfile from "./Profile/RestaurantProfile";
 import Profile from "./Profile/Profile";
 import Restaurant from "./Restaurant/Restaurant";
+import Event from "./Event/Event";
+import RestaurantEvent from "./Event/RestaurantEvent";
+import AddEvent from "./Event/AddEvent";
+import EventDetails from "./Event/EventDetails";
+import RestaurantReview from "./Restaurant/RestaurantReview";
+import CustomerCard from "./Customer/CustomerCard";
 //Create a Main Component
 class Main extends Component {
   render() {
@@ -28,6 +34,12 @@ class Main extends Component {
         <Route path="/restaurantprofile" component={RestaurantProfile} />
         <Route path="/bizsignup" component={BizSignup} />
         <Route path="/restaurant" component={Restaurant} />
+        <Route path="/event" component={Event} />
+        <Route path="/restaurantevent" component={RestaurantEvent} />
+        <Route path="/addevent" component={AddEvent} />
+        <Route path="/eventdetails" component={EventDetails} />
+        <Route path="/restaurantreview" component={RestaurantReview} />
+        <Route path="/customercard" component={CustomerCard} />
       </div>
     );
   }
