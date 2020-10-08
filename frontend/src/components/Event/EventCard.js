@@ -16,7 +16,7 @@ import FontAwesomeIcon from "react-fontawesome";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-class RestaurantEvent extends Component {
+class EventDetails extends Component {
   constructor(props) {
     super(props);
     this.setState({
@@ -65,7 +65,7 @@ class RestaurantEvent extends Component {
         return (
           <Col sm={3}>
             <Card bg="white" style={{ width: "18rem" }}>
-              <Link to={{ pathname: "/eventdetails", state: event }}>
+              <Link to={{ pathname: "/registration", state: event }}>
                 <Card.Img
                   variant="top"
                   style={{ height: "15rem" }}
@@ -107,7 +107,7 @@ class RestaurantEvent extends Component {
             <Button
               variant="success"
               name="order"
-              href="/addevent"
+              href="/addEvent"
               style={{ background: "#d32323" }}
             >
               Add Event

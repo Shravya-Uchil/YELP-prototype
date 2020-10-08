@@ -9,8 +9,9 @@ import {
   Col,
   Row,
   Form,
-  ButtonGroup,
-  ButtonToolbar,
+  Dropdown,
+  DropdownButton,
+  InputGroup,
 } from "react-bootstrap";
 import cookie from "react-cookies";
 import NavBar from "../LandingPage/Navbar.js";
@@ -24,12 +25,14 @@ class Restaurant extends Component {
       menu_category: [],
       menu_items: [],
       review_rating: 0,
+      order_type: "PICKUP",
     });
     this.ItemsForCategory = this.ItemsForCategory.bind(this);
     this.getAllMenuItems = this.getAllMenuItems.bind(this);
     this.getAllCategories = this.getAllCategories.bind(this);
     this.onChange = this.onChange.bind(this);
     this.changeRating = this.changeRating.bind(this);
+    this.onOrder = this.onOrder.bind(this);
     this.getAllMenuItems().then((ret) => {
       this.getAllCategories();
     });
@@ -39,6 +42,7 @@ class Restaurant extends Component {
 
   componentWillMount() {
     console.log("mount");
+    localStorage.removeItem("cart_list");
     if (this.props.location.state) {
       document.title = this.props.location.state.restaurant_name;
       localStorage.setItem(
@@ -120,6 +124,43 @@ class Restaurant extends Component {
     }
   };
 
+  onOrder = (e) => {
+    if (localStorage.getItem("cart_list")) {
+      var total_cost = 0;
+      var cartList = [];
+      cartList.push(...JSON.parse(localStorage.getItem("cart_list")));
+      for (let i = 0; i < cartList.length; i++) {
+        total_cost =
+          cartList[i].item_quantity * cartList[i].item_price + total_cost;
+      }
+      if (this.props.location.state) {
+        let data = {
+          customer_id: localStorage.getItem("customer_id"),
+          restaurant_id: this.props.location.state.restaurant_id,
+          order_status: "NEW ORDER",
+          order_cost: total_cost,
+          order_type: this.state.order_type,
+          cart_items: cartList,
+          order_delivery_status: "ORDER RECEIVED",
+        };
+        console.log("placing order");
+        console.log(data);
+        axios
+          .post(`http://localhost:3001/yelp/order/customer/placeorder`, data)
+          .then((response) => {
+            localStorage.removeItem("cart_items");
+            //alert("Your order is placed!");
+            this.setState({
+              isOrderPlaced: 1,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+  };
+
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -159,17 +200,27 @@ class Restaurant extends Component {
       .catch((error) => {
         console.log("Error");
         console.log(error);
+
+        alert("Review already exists!");
       });
   };
 
+  onTypeSelect = (e) => {
+    let type = e.target.text;
+    this.setState({
+      order_type: type,
+    });
+  };
+
   render() {
+    let message = null;
     console.log("render");
+    let redirect = null;
     if (!cookie.load("cookie")) {
-      redirectVar = <Redirect to="/login" />;
+      redirect = <Redirect to="/login" />;
     }
 
-    let redirectVar = null,
-      category = null,
+    let category = null,
       menuTag = [],
       restaurant_name,
       contact,
@@ -179,7 +230,7 @@ class Restaurant extends Component {
       restaurant = this.props.location.state;
 
     if (!localStorage.getItem("customer_id") || !this.props.location.state) {
-      redirectVar = <Redirect to="/home" />;
+      redirect = <Redirect to="/home" />;
     }
 
     if (restaurant) {
@@ -209,9 +260,32 @@ class Restaurant extends Component {
     if (this.state && this.state.isAddDone) {
       isReviewAdded = true;
     }
+    let orderTypeList = ["DELIVERY", "PICKUP"];
+    let orderTypeTag = orderTypeList.map((type) => {
+      return (
+        <Dropdown.Item href="#" onClick={this.onTypeSelect}>
+          {type}
+        </Dropdown.Item>
+      );
+    });
+    let ordertag = (
+      <Button
+        variant="success"
+        name="order"
+        onClick={this.onOrder}
+        style={{ background: "#d32323" }}
+      >
+        Order
+      </Button>
+    );
+    if (this.state && this.state.isOrderPlaced) {
+      redirect = <Redirect to="/customerOrderHistory" />;
+      console.log("redirect");
+      console.log(redirect);
+    }
     return (
       <div>
-        {redirectVar}
+        {redirect}
         <NavBar />
         <Container>
           <Card
@@ -291,14 +365,17 @@ class Restaurant extends Component {
           <Container>{menuTag}</Container>
         </Container>
         <center>
-          <Button
-            variant="success"
-            name="order"
-            href="/cart"
-            style={{ background: "#d32323" }}
+          <DropdownButton
+            variant="outline-secondary"
+            title="Order Type"
+            id="input-group-dropdown-2"
+            style={{ display: "flow-root" }}
           >
-            Order
-          </Button>
+            {orderTypeTag}
+          </DropdownButton>
+          <br />
+          <br />
+          {ordertag}
         </center>
         <br />
       </div>

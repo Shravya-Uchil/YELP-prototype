@@ -11,9 +11,11 @@ import {
   Alert,
   Col,
   Row,
+  Container,
 } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
+import { Link } from "react-router-dom";
 
 class EventDetails extends Component {
   constructor(props) {
@@ -49,28 +51,49 @@ class EventDetails extends Component {
   };
 
   componentDidMount() {
-    axios
-      .get(
-        `http://localhost:3001/yelp/event/customer/isRegistered/${localStorage.getItem(
-          "customer_id"
-        )}/${this.props.location.state.event_id}`
-      )
-      .then((response) => {
-        var cuisines = [];
-        console.log("response");
-        console.log(response.data);
-        if (response.data) {
-          if (response.data[0].result === "REGISTERED") {
+    if (localStorage.getItem("customer_id")) {
+      axios
+        .get(
+          `http://localhost:3001/yelp/event/customer/isRegistered/${localStorage.getItem(
+            "customer_id"
+          )}/${this.props.location.state.event_id}`
+        )
+        .then((response) => {
+          var cuisines = [];
+          console.log("response");
+          console.log(response.data);
+          if (response.data) {
+            if (response.data[0].result === "REGISTERED") {
+              this.setState({
+                isRegistered: 1,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.log("Error");
+          console.log(error);
+        });
+    } else {
+      axios
+        .get(
+          `http://localhost:3001/yelp/event/restaurant/registration/${this.props.location.state.event_id}`
+        )
+        .then((response) => {
+          var cuisines = [];
+          console.log("response cust");
+          console.log(response.data);
+          if (response.data) {
             this.setState({
-              isRegistered: 1,
+              registered_customers: response.data,
             });
           }
-        }
-      })
-      .catch((error) => {
-        console.log("Error");
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log("Error");
+          console.log(error);
+        });
+    }
   }
 
   render() {
@@ -79,31 +102,53 @@ class EventDetails extends Component {
     let redirectVar = null;
     let eventTag = null;
     let registerTag = null;
+    let registered_customers = null;
     if (!cookie.load("cookie")) {
       redirectVar = <Redirect to="/login" />;
     }
-    if (this.state && this.state.isRegistered) {
-      registerTag = (
-        <Button
-          variant="success"
-          name="registered"
-          style={{ background: "#d32323" }}
-          disabled={true}
-        >
-          Registered
-        </Button>
-      );
+    if (localStorage.getItem("customer_id")) {
+      if (this.state && this.state.isRegistered) {
+        registerTag = (
+          <Button
+            variant="success"
+            name="registered"
+            style={{ background: "#d32323" }}
+            disabled={true}
+          >
+            Registered
+          </Button>
+        );
+      } else {
+        registerTag = (
+          <Button
+            variant="success"
+            name="registered"
+            onClick={this.onRegister}
+            style={{ background: "#d32323" }}
+          >
+            Register
+          </Button>
+        );
+      }
     } else {
-      registerTag = (
-        <Button
-          variant="success"
-          name="registered"
-          onClick={this.onRegister}
-          style={{ background: "#d32323" }}
-        >
-          Register
-        </Button>
-      );
+      if (this.state && this.state.registered_customers) {
+        registered_customers = this.state.registered_customers.map((cust) => {
+          return (
+            <Col sm={3} style={{ margin: "2%" }}>
+              <Card bg="white" style={{ width: "18rem" }}>
+                <Link to={{ pathname: "/customercard", state: cust }}>
+                  <Card.Img
+                    variant="top"
+                    style={{ height: "15rem" }}
+                    src="http://localhost:3001/yelp/images/user/user_profile.png"
+                  />
+                  <Card.Title>{cust.cust_name}</Card.Title>
+                </Link>
+              </Card>
+            </Col>
+          );
+        });
+      }
     }
 
     eventTag = (
@@ -130,11 +175,19 @@ class EventDetails extends Component {
       </Card>
     );
 
+    let header = null;
+    if (localStorage.getItem("restaurant_id")) {
+      header = <h4>Registered Customers</h4>;
+    }
     return (
       <div>
         {redirectVar}
         <NavBar />
         <div>{eventTag}</div>
+        <Container style={{ margin: "5%" }}>
+          {header}
+          {registered_customers}
+        </Container>
       </div>
     );
   }

@@ -53,7 +53,7 @@ class CustomerCard extends Component {
     if (this.state && this.state.customer) {
       customerTag = (
         <Row>
-          <Col sm={3}>
+          <Col sm={2}>
             <Card
               bg="light"
               text="dark"
@@ -67,7 +67,7 @@ class CustomerCard extends Component {
               <Card.Title>{this.state.customer.cust_name || ""}</Card.Title>
             </Card>
           </Col>
-          <Col sm={3}>
+          <Col sm={2}>
             <Card
               bg="light"
               text="dark"

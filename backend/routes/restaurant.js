@@ -146,9 +146,9 @@ router.post("/restaurantReview", async (req, res) => {
     } else if (
       result &&
       result.length > 0 &&
-      result[0][0].status === "NO_RECORD"
+      result[0][0].status === "REVIEW_EXISTS"
     ) {
-      console.log("No record found:");
+      console.log("Review exists:");
       console.log(result);
       res.writeHead(401, {
         "Content-Type": "text/plain",

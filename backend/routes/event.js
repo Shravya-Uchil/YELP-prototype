@@ -170,4 +170,25 @@ router.get("/customer/isRegistered/:customer_id/:event_id", (req, res) => {
   });
 });
 
+router.get("/restaurant/registration/:event_id", (req, res) => {
+  console.log("get registered customers for" + req.params.event_id);
+  let sql = `CALL get_registered_customers_by_eventId('${req.params.event_id}');`;
+  pool.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error in Data");
+    }
+    if (result && result.length > 0 && result[0]) {
+      console.log(result);
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
 module.exports = router;

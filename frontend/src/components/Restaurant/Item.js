@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 import { Card, Modal, Button, Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 class Item extends Component {
   constructor(props) {
     super(props);
     this.setState({
       showModal: false,
-      itemQty: 1,
+      itemQty: 0,
     });
     this.openModal = this.openModal.bind(this);
     this.onClose = this.onClose.bind(this);
     this.addToCart = this.addToCart.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({
+      showModal: false,
+      itemQty: 0,
+    });
+  }
   openModal = () => {
     this.setState({
       showModal: true,
@@ -35,15 +42,17 @@ class Item extends Component {
   addToCart = (e) => {
     let item_id = this.props.menu_item.item_id;
     let cartList = [];
-    if (
+    /*if (
       parseInt(localStorage.getItem("selected_restaurant_id")) !==
       this.props.menu_item.restaurant_id
     ) {
       localStorage.setItem("cart_list", cartList);
-    }
+    }*/
 
     if (localStorage.getItem("cart_list")) {
       cartList.push(...JSON.parse(localStorage.getItem("cart_list")));
+    } else {
+      localStorage.setItem("cart_list", cartList);
     }
     let index = cartList.findIndex((cart) => cart.item_id === item_id);
     if (index === -1) {
@@ -57,7 +66,7 @@ class Item extends Component {
       localStorage.setItem("cart_list", JSON.stringify(cartList));
       this.setState({
         showModal: false,
-        itemQty: 1,
+        itemQty: this.state.itemQty || 1,
       });
     } else {
       cartList[index].item_quantity =
@@ -65,7 +74,7 @@ class Item extends Component {
       localStorage.setItem("cart_list", JSON.stringify(cartList));
       this.setState({
         showModal: false,
-        itemQty: 1,
+        itemQty: cartList[index].item_quantity,
       });
     }
   };
@@ -76,23 +85,22 @@ class Item extends Component {
 
     if (localStorage.getItem("cart_list")) {
       cartList.push(...JSON.parse(localStorage.getItem("cart_list")));
-    }
 
-    console.log(cartList);
-    let index = cartList.findIndex((cart) => cart.item_id === item_id);
-    console.log("remove");
-    console.log(index);
-    console.log(item_id);
-    console.log(cartList);
-    if (index !== -1) {
-      console.log("removing");
-      cartList.splice(index, 1);
       console.log(cartList);
-      localStorage.setItem("cart_items", JSON.stringify(cartList));
-      this.setState({
-        showModal: false,
-        itemQty: 1,
-      });
+      let index = cartList.findIndex((cart) => cart.item_id === item_id);
+      console.log("remove");
+      console.log(index);
+      console.log(item_id);
+      console.log(cartList);
+      if (index !== -1) {
+        console.log("removing");
+        cartList.splice(index, 1);
+        console.log(cartList);
+        localStorage.setItem("cart_items", JSON.stringify(cartList));
+        this.setState({
+          showModal: false,
+        });
+      }
     }
   };
 
@@ -118,9 +126,52 @@ class Item extends Component {
       showModal = this.state.showModal;
     }
     console.log("Modal: " + showModal);
+    console.log(this.state);
+    let itemButtons = null;
+    let qty = 0;
+    if (this.state && this.state.itemQty) {
+      qty = this.state.itemQty;
+    }
+    if (localStorage.getItem("customer_id")) {
+      itemButtons = (
+        <div className="d-flex flex-row">
+          <Button
+            onClick={this.openModal}
+            name={this.props.menu_item.item_id}
+            style={{ background: "#d32323" }}
+          >
+            Add to Cart
+          </Button>
+          &nbsp; &nbsp;
+          <Button
+            onClick={this.removeFromCart}
+            name={this.props.menu_item.item_id}
+            style={{ background: "#d32323" }}
+          >
+            Remove from Cart
+          </Button>
+          &nbsp; &nbsp;
+          <div>Qty: {qty}</div>
+        </div>
+      );
+    } else {
+      itemButtons = (
+        <div>
+          <Link to={{ pathname: "/additem", state: this.props.menu_item }}>
+            <Button
+              variant="primary"
+              name={this.props.menu_item.item_id}
+              style={{ background: "#d32323" }}
+            >
+              Edit
+            </Button>
+          </Link>
+        </div>
+      );
+    }
     return (
       <div>
-        <Card bg="white" style={{ width: "50rem", margin: "2%" }}>
+        <Card bg="white" style={{ width: "70rem", margin: "2%" }}>
           <Row>
             <Col>
               <Card.Img
@@ -134,6 +185,9 @@ class Item extends Component {
                 <Card.Title>{this.props.menu_item.item_name}</Card.Title>
                 <Card.Text>{this.props.menu_item.item_description}</Card.Text>
                 <Card.Text>
+                  Ingredients: {this.props.menu_item.item_ingredients}
+                </Card.Text>
+                <Card.Text>
                   Price: $ {this.props.menu_item.item_price}
                 </Card.Text>
               </Card.Body>
@@ -141,25 +195,7 @@ class Item extends Component {
             <Col align="right">
               <br />
               <br />
-              <div className="d-flex flex-row">
-                <Button
-                  variant="primary"
-                  onClick={this.openModal}
-                  name={this.props.menu_item.item_id}
-                  style={{ background: "#d32323" }}
-                >
-                  Add to Cart
-                </Button>
-                &nbsp; &nbsp;
-                <Button
-                  variant="primary"
-                  onClick={this.removeFromCart}
-                  name={this.props.menu_item.item_id}
-                  style={{ background: "#d32323" }}
-                >
-                  Remove from Cart
-                </Button>
-              </div>
+              {itemButtons}
             </Col>
           </Row>
         </Card>

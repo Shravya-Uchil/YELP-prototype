@@ -38,6 +38,11 @@ class Navbar extends Component {
             </Link>
           </li>
           <li>
+            <Link to="/customerorderhistory" id="login-link">
+              Orders
+            </Link>
+          </li>
+          <li>
             <Link to="/" id="login-link" onClick={this.handleLogout}>
               <span className="glyphicon glyphicon-user"></span>Logout
             </Link>
@@ -46,6 +51,7 @@ class Navbar extends Component {
       );
     } else {
       //Else display login button
+      localStorage.clear();
       console.log("Not Able to read cookie");
       navLogin = (
         <ul className="nav navbar-nav navbar-right" id="login-icon">

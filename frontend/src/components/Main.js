@@ -17,6 +17,8 @@ import AddEvent from "./Event/AddEvent";
 import EventDetails from "./Event/EventDetails";
 import RestaurantReview from "./Restaurant/RestaurantReview";
 import CustomerCard from "./Customer/CustomerCard";
+import AddItem from "./Restaurant/AddItem";
+import CustomerOrderHistory from "./Order/CustomerOrderHistory";
 //Create a Main Component
 class Main extends Component {
   render() {
@@ -40,6 +42,8 @@ class Main extends Component {
         <Route path="/eventdetails" component={EventDetails} />
         <Route path="/restaurantreview" component={RestaurantReview} />
         <Route path="/customercard" component={CustomerCard} />
+        <Route path="/additem" component={AddItem} />
+        <Route path="/customerorderhistory" component={CustomerOrderHistory} />
       </div>
     );
   }
