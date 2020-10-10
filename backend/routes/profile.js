@@ -59,7 +59,8 @@ router.post("/customer", async (req, res) => {
       encryptedPassword =
         "'" + (await bcrypt.hash(req.body.password, 12)) + "'";
     }
-    let sql = `CALL update_customer('${req.body.email_id}', '${req.body.cust_name}', ${encryptedPassword}, '${req.body.city}', '${req.body.state}', '${req.body.country}', '${req.body.nick_name}', '${req.body.headline}', 'shravya');`;
+    let sql = `CALL update_customer('${req.body.email_id}', '${req.body.cust_name}', ${encryptedPassword}, '${req.body.city}', '${req.body.state}', '${req.body.country}', '${req.body.nick_name}', '${req.body.headline}', 
+    '${req.body.yelp_since}','${req.body.dob}','${req.body.things_love}','${req.body.find_me}','${req.body.blog_website}','${req.body.phone_number}');`;
     db.query(sql, (err, result) => {
       if (err) {
         console.log("Error:");

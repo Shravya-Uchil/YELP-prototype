@@ -19,6 +19,8 @@ import RestaurantReview from "./Restaurant/RestaurantReview";
 import CustomerCard from "./Customer/CustomerCard";
 import AddItem from "./Restaurant/AddItem";
 import CustomerOrderHistory from "./Order/CustomerOrderHistory";
+import OrderDetails from "./Order/OrderDetails";
+import RestaurantOrders from "./Order/RestaurantOrders";
 //Create a Main Component
 class Main extends Component {
   render() {
@@ -44,6 +46,8 @@ class Main extends Component {
         <Route path="/customercard" component={CustomerCard} />
         <Route path="/additem" component={AddItem} />
         <Route path="/customerorderhistory" component={CustomerOrderHistory} />
+        <Route path="/ordercard" component={OrderDetails} />
+        <Route path="/restaurantorders" component={RestaurantOrders} />
       </div>
     );
   }

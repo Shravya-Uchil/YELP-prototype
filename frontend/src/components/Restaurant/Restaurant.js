@@ -137,11 +137,11 @@ class Restaurant extends Component {
         let data = {
           customer_id: localStorage.getItem("customer_id"),
           restaurant_id: this.props.location.state.restaurant_id,
-          order_status: "NEW ORDER",
+          order_status: "New Order",
           order_cost: total_cost,
           order_type: this.state.order_type,
           cart_items: cartList,
-          order_delivery_status: "ORDER RECEIVED",
+          order_delivery_status: "Order Received",
         };
         console.log("placing order");
         console.log(data);
@@ -260,7 +260,7 @@ class Restaurant extends Component {
     if (this.state && this.state.isAddDone) {
       isReviewAdded = true;
     }
-    let orderTypeList = ["DELIVERY", "PICKUP"];
+    let orderTypeList = ["Delivery", "Pickup"];
     let orderTypeTag = orderTypeList.map((type) => {
       return (
         <Dropdown.Item href="#" onClick={this.onTypeSelect}>

@@ -2,16 +2,7 @@ import React, { Component } from "react";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
 import axios from "axios";
-import {
-  InputGroup,
-  FormControl,
-  Button,
-  DropdownButton,
-  Dropdown,
-  Alert,
-  Col,
-  Row,
-} from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
 
@@ -26,7 +17,6 @@ class CustomerCard extends Component {
         `http://localhost:3001/yelp/profile/customerById/${this.props.location.state.customer_id}`
       )
       .then((response) => {
-        var cuisines = [];
         console.log("response");
         console.log(response.data);
         if (response.data) {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
-import { Card, Container, Col, Form, Row, Button } from "react-bootstrap";
+import { Card, Container, Col, Row, Button } from "react-bootstrap";
 import axios from "axios";
 import Reviews from "../Restaurant/RestaurantReview.js";
 import ItemCard from "../Restaurant/Item";

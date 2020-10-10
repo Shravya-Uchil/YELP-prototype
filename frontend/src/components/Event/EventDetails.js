@@ -2,17 +2,7 @@ import React, { Component } from "react";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
 import axios from "axios";
-import {
-  InputGroup,
-  FormControl,
-  Button,
-  DropdownButton,
-  Dropdown,
-  Alert,
-  Col,
-  Row,
-  Container,
-} from "react-bootstrap";
+import { Button, Col, Container } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
 import { Link } from "react-router-dom";
@@ -59,7 +49,6 @@ class EventDetails extends Component {
           )}/${this.props.location.state.event_id}`
         )
         .then((response) => {
-          var cuisines = [];
           console.log("response");
           console.log(response.data);
           if (response.data) {
@@ -80,7 +69,6 @@ class EventDetails extends Component {
           `http://localhost:3001/yelp/event/restaurant/registration/${this.props.location.state.event_id}`
         )
         .then((response) => {
-          var cuisines = [];
           console.log("response cust");
           console.log(response.data);
           if (response.data) {

@@ -67,22 +67,24 @@ class CustomerProfile extends Component {
       var { customer } = nextProps;
 
       var customerData = {
-        //customer_id: customer.customer_id,
         cust_name: customer.cust_name || this.state.cust_name,
         email_id: customer.email_id || this.state.email_id,
         city: customer.city || this.state.city,
         state: customer.state || this.state.state,
         country: customer.country || this.state.country,
-        // address: customer.address,
-        //phone_number: customer.phone_number,
+        phone_number: customer.phone_number || this.state.phone_number,
         cust_image: customer.cust_image || this.state.cust_image,
-        //dob: customer.dob,
+        dob: customer.dob || this.state.dob,
         nick_name: customer.nick_name || this.state.nick_name,
         headline: customer.headline || this.state.headline,
-        //yelp_since: customer.yelp_since,
-        //things_love: customer.things_love,
+        yelp_since: customer.yelp_since || this.state.yelp_since,
+        things_love: customer.things_love || this.state.things_love,
+        find_me: customer.find_me || this.state.find_me,
+        blog_website: customer.blog_website || this.state.blog_website,
       };
       this.setState(customerData);
+      console.log("customer data");
+      console.log(customerData);
     }
   }
 
@@ -118,9 +120,9 @@ class CustomerProfile extends Component {
       <div>
         <Container fluid={true}>
           <Row>
-            <Col xs={6} md={4}>
+            <Col class="col-md-3 col-3" style={{ margin: "2%" }}>
               <center>
-                <Card style={{ width: "18rem" }}>
+                <Card style={{ width: "15rem" }}>
                   <Card.Img variant="top" src={imageSrc} />
                   <Card.Body>
                     <Card.Title>
@@ -129,8 +131,6 @@ class CustomerProfile extends Component {
                   </Card.Body>
                 </Card>
                 <form onSubmit={this.onUpload}>
-                  <br />
-                  <br />
                   <div class="custom-file" style={{ width: "80%" }}>
                     <input
                       type="file"
@@ -153,138 +153,218 @@ class CustomerProfile extends Component {
                 </form>
               </center>
             </Col>
-            <Col style={{ margin: "2%" }}>
-              <h4>Profile</h4>
+            <Col class="col-md-4 col-4" style={{ margin: "2%" }} xs={6} md={4}>
+              <h4>Basic Details</h4>
               <br />
-              <Form onSubmit={this.onUpdate}>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="name">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                      name="cust_name"
-                      type="text"
-                      pattern="^[A-Za-z0-9 ]+$"
-                      required={true}
-                      value={this.state.cust_name}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="dob">
-                    <Form.Label>Date Of Birth</Form.Label>
-                    <Form.Control
-                      name="dob"
-                      type="date"
-                      value={this.state.dob}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="city">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      name="city"
-                      type="text"
-                      value={this.state.city}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="state">
-                    <Form.Label>State</Form.Label>
-                    <Form.Control
-                      name="state"
-                      type="text"
-                      value={this.state.state}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="country">
-                    <Form.Label>Country</Form.Label>
-                    <Form.Control
-                      name="country"
-                      type="text"
-                      value={this.state.country}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="nickname">
-                    <Form.Label>Nickname</Form.Label>
-                    <Form.Control
-                      name="nick_name"
-                      type="text"
-                      value={this.state.nick_name}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="headline">
-                    <Form.Label>Headline</Form.Label>
-                    <Form.Control
-                      name="headline"
-                      type="text"
-                      value={this.state.headline}
-                      onChange={this.onChange}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                  <Form.Group as={Col} controlId="email_id">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      name="email_id"
-                      value={this.state.email_id}
-                      disabled
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="RB.password">
-                    <Form.Label>Change Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      onChange={this.onChange}
-                      placeholder="New Password"
-                      required={true}
-                      autocomplete="off"
-                    />
-                  </Form.Group>
-                </Form.Row>
-
-                <ButtonGroup aria-label="Third group">
-                  <Button
-                    type="submit"
-                    variant="success"
-                    style={{ background: "#d32323" }}
-                    id="update"
-                  >
-                    Save Changes
-                  </Button>
-                </ButtonGroup>
-                {"  "}
-                <ButtonGroup aria-label="Fourth group">
-                  <Link to="/login">Cancel</Link>
-                </ButtonGroup>
-              </Form>
+              <Card style={{ width: "25rem" }}>
+                <Card.Body>
+                  <Form>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="name">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control
+                          name="cust_name"
+                          type="text"
+                          pattern="^[A-Za-z0-9 ]+$"
+                          required={true}
+                          value={this.state.cust_name}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="dob">
+                        <Form.Label>Date Of Birth</Form.Label>
+                        <Form.Control
+                          name="dob"
+                          type="date"
+                          value={this.state.dob}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                          required
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="city">
+                        <Form.Label>City</Form.Label>
+                        <Form.Control
+                          name="city"
+                          type="text"
+                          value={this.state.city}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="state">
+                        <Form.Label>State</Form.Label>
+                        <Form.Control
+                          name="state"
+                          type="text"
+                          value={this.state.state}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="country">
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                          name="country"
+                          type="text"
+                          value={this.state.country}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="nickname">
+                        <Form.Label>Nickname</Form.Label>
+                        <Form.Control
+                          name="nick_name"
+                          type="text"
+                          value={this.state.nick_name}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="headline">
+                        <Form.Label>Headline</Form.Label>
+                        <Form.Control
+                          name="headline"
+                          type="text"
+                          value={this.state.headline}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                  </Form>
+                </Card.Body>
+              </Card>
             </Col>
+
+            <Col class="col-md-3 col-3" style={{ margin: "2%" }}>
+              <h4>About</h4>
+              <br />
+              <Card style={{ width: "25rem" }}>
+                <Card.Body>
+                  <Form>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="yelp_since">
+                        <Form.Label>Yelping Since</Form.Label>
+                        <Form.Control
+                          name="yelp_since"
+                          type="date"
+                          value={this.state.yelp_since}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                          required
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="things_love">
+                        <Form.Label>Things I Love</Form.Label>
+                        <Form.Control
+                          name="things_love"
+                          type="text"
+                          value={this.state.things_love}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="find_me">
+                        <Form.Label>Find Me In</Form.Label>
+                        <Form.Control
+                          name="find_me"
+                          type="text"
+                          value={this.state.find_me}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="blog_website">
+                        <Form.Label>My Blog or Website</Form.Label>
+                        <Form.Control
+                          name="blog_website"
+                          type="text"
+                          value={this.state.blog}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="phone_number">
+                        <Form.Label>Phone Number</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="phone_number"
+                          value={this.state.phone_number}
+                          onChange={this.onChange}
+                          autocomplete="off"
+                          pattern="^[0-9]+$"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="email_id">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                          type="email"
+                          name="email_id"
+                          value={this.state.email_id}
+                          disabled
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="RB.password">
+                        <Form.Label>Change Password</Form.Label>
+                        <Form.Control
+                          type="password"
+                          name="password"
+                          onChange={this.onChange}
+                          placeholder="New Password"
+                          required={true}
+                          autocomplete="off"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <center>
+              <ButtonGroup aria-label="Third group">
+                <Button
+                  variant="success"
+                  style={{ background: "#d32323" }}
+                  id="update"
+                  onClick={this.onUpdate}
+                >
+                  Save Changes
+                </Button>
+              </ButtonGroup>
+              {"  "}
+              <ButtonGroup aria-label="Fourth group">
+                <Link to="/login">Cancel</Link>
+              </ButtonGroup>
+            </center>
           </Row>
           <br />
         </Container>

@@ -68,4 +68,110 @@ router.get("/customer/allOrders/:customer_id", (req, res) => {
   });
 });
 
+router.get("/restaurant/allOrders/:restaurant_id", (req, res) => {
+  console.log("get all orders for" + req.params.restaurant_id);
+  let sql = `CALL get_orders_restaurant('${req.params.restaurant_id}');`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Database Error");
+    }
+    console.log(result);
+    if (result && result.length > 0 && result[0][0].status == "NO_RECORDS") {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("NO_RECORDS");
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+router.get("/orderitems/:order_id", (req, res) => {
+  console.log("get order items for" + req.params.order_id);
+  let sql = `CALL get_orders_items('${req.params.order_id}');`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Database Error");
+    }
+    console.log(result);
+    if (result && result.length > 0 && result[0][0].status == "NO_RECORDS") {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("NO_RECORDS");
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+router.post("/restaurant/updateOrderStatus", (req, res) => {
+  console.log("update order status");
+  console.log(req.body);
+  let sql = `CALL update_order_status('${req.body.order_id}', '${req.body.order_status}');`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Database Error");
+    }
+    console.log(result);
+    if (result && result.length > 0 && result[0][0].status == "NO_RECORDS") {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("NO_RECORDS");
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+router.post("/restaurant/updateDeliveryStatus", (req, res) => {
+  console.log("update delivery status");
+  console.log(req.body);
+  let sql = `CALL update_delivery_status('${req.body.order_id}', '${req.body.order_delivery_status}');`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Database Error");
+    }
+    console.log(result);
+    if (result && result.length > 0 && result[0][0].status == "NO_RECORDS") {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("NO_RECORDS");
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
 module.exports = router;

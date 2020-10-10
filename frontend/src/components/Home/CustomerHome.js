@@ -21,7 +21,7 @@ class CustomerHome extends Component {
     super(props);
     this.setState({
       search_input: "",
-      noRecords: false,
+      noRecords: 0,
     });
 
     this.onChange = this.onChange.bind(this);
@@ -60,16 +60,16 @@ class CustomerHome extends Component {
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
-      noRecords: false,
+      noRecords: 0,
     });
   };
 
   onCuisineSelect = (e) => {
-    let filter = e.target.text.replace(",", "");
-    filter = filter.replace(" ", "");
+    let filter = e.target.text;
     if (filter === "All") {
       this.setState({
         filteredRestaurants: this.state.allRestaurants,
+        noRecords: 0,
       });
     } else {
       var filteredList = this.state.allRestaurants.filter(
@@ -78,9 +78,38 @@ class CustomerHome extends Component {
       this.setState({
         filteredRestaurants: filteredList,
       });
+      if (filteredList.length === 0) {
+        this.setState({ noRecords: 1 });
+      }
     }
-    if (filteredList.length === 0) {
-      this.setState({ noRecords: true });
+  };
+
+  onTypeSelect = (e) => {
+    let filter = e.target.text;
+    let filteredList = this.state.allRestaurants;
+    if (filter === "All") {
+      this.setState({
+        noRecords: 0,
+      });
+    } else if (filter === "Dine-in") {
+      filteredList = this.state.allRestaurants.filter(
+        (restaurant) => restaurant.dine_in
+      );
+    } else if (filter === "Delivery") {
+      filteredList = this.state.allRestaurants.filter(
+        (restaurant) => restaurant.yelp_delivery
+      );
+    } else if (filter === "Pickup") {
+      filteredList = this.state.allRestaurants.filter(
+        (restaurant) => restaurant.curbside_pickup
+      );
+    }
+    this.setState({
+      filteredRestaurants: filteredList,
+    });
+
+    if (filteredList && filteredList.length === 0) {
+      this.setState({ noRecords: 1 });
     }
   };
 
@@ -130,22 +159,22 @@ class CustomerHome extends Component {
     }
     console.log("cust" + redirectVar);
     let cusineList = [
-      "All, ",
-      "Pizza, ",
-      "Chinese, ",
-      "Indian, ",
-      "Mexican, ",
-      "American, ",
-      "Thai, ",
-      "Burgers, ",
-      "Italian, ",
-      "Stakehouse, ",
-      "Seafood, ",
-      "Korean, ",
-      "Japanese, ",
-      "Breakfast, ",
-      "Sushi, ",
-      "Vietnamese, ",
+      "All",
+      "Pizza",
+      "Chinese",
+      "Indian",
+      "Mexican",
+      "American",
+      "Thai",
+      "Burgers",
+      "Italian",
+      "Stakehouse",
+      "Seafood",
+      "Korean",
+      "Japanese",
+      "Breakfast",
+      "Sushi",
+      "Vietnamese",
       "Sandwiches",
     ];
     cuisineTag = cusineList.map((cuisine) => {
@@ -155,6 +184,16 @@ class CustomerHome extends Component {
         </Dropdown.Item>
       );
     });
+
+    let orderTypeList = ["All", "Dine-in", "Delivery", "Pickup"];
+    let orderTypeTag = orderTypeList.map((type) => {
+      return (
+        <Dropdown.Item href="#" onClick={this.onTypeSelect}>
+          {type}
+        </Dropdown.Item>
+      );
+    });
+
     if (this.state && this.state.filteredRestaurants) {
       restaurantsTag = this.state.filteredRestaurants.map((restaurant) => {
         return (
@@ -219,6 +258,16 @@ class CustomerHome extends Component {
                   style={{ float: "right" }}
                 >
                   {cuisineTag}
+                </DropdownButton>
+                &nbsp;&nbsp;
+                <DropdownButton
+                  as={InputGroup.Append}
+                  variant="outline-secondary"
+                  title="Mode of Delivery"
+                  id="input-group-dropdown-2"
+                  style={{ float: "right" }}
+                >
+                  {orderTypeTag}
                 </DropdownButton>
               </InputGroup>
             </form>

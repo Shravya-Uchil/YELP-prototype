@@ -2,16 +2,6 @@ import React, { Component } from "react";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
 import axios from "axios";
-import {
-  InputGroup,
-  FormControl,
-  Button,
-  DropdownButton,
-  Dropdown,
-  Alert,
-  Col,
-  Row,
-} from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
 import StarRatings from "react-star-ratings";
@@ -55,11 +45,6 @@ class RestaurantReview extends Component {
     if (!cookie.load("cookie")) {
       redirectVar = <Redirect to="/login" />;
     }
-    let rating = null;
-    let customer_name = "";
-    let restaurant_name = "";
-    let review_text = "";
-    let review_date = "";
 
     if (this.state && this.state.reviews) {
       reviewsTag = this.state.reviews.map((review) => {

@@ -2,17 +2,7 @@ import React, { Component } from "react";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
 import axios from "axios";
-import {
-  InputGroup,
-  FormControl,
-  Button,
-  DropdownButton,
-  Dropdown,
-  Alert,
-  Col,
-  Row,
-} from "react-bootstrap";
-import FontAwesomeIcon from "react-fontawesome";
+import { Button, Alert, Col, Row } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 

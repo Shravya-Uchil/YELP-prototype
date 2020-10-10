@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import cookie from "react-cookies";
-import { Redirect } from "react-router";
 import { customerLogout } from "../../actions/loginActions";
 import { connect } from "react-redux";
 
@@ -22,6 +21,20 @@ class Navbar extends Component {
     let navLogin = null;
     if (cookie.load("cookie")) {
       console.log("Able to read cookie");
+      let ordersTab = null;
+      if (localStorage.getItem("customer_id")) {
+        ordersTab = (
+          <Link to="/customerorderhistory" id="login-link">
+            Orders
+          </Link>
+        );
+      } else {
+        ordersTab = (
+          <Link to="/restaurantorders" id="login-link">
+            Orders
+          </Link>
+        );
+      }
       navLogin = (
         <ul
           className="nav navbar-nav navbar-right d-flex flex-row"
@@ -32,16 +45,15 @@ class Navbar extends Component {
               Profile
             </Link>
           </li>
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <li>
             <Link to="/event" id="login-link">
               Events
             </Link>
           </li>
-          <li>
-            <Link to="/customerorderhistory" id="login-link">
-              Orders
-            </Link>
-          </li>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <li>{ordersTab}</li>
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <li>
             <Link to="/" id="login-link" onClick={this.handleLogout}>
               <span className="glyphicon glyphicon-user"></span>Logout
