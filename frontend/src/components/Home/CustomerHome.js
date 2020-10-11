@@ -15,6 +15,12 @@ import {
 import FontAwesomeIcon from "react-fontawesome";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Map from "../Map/Map";
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyAIzrgRfxiIcZhQe3Qf5rIIRx6exhZPwwE");
+Geocode.setLanguage("en");
+Geocode.setRegion("us");
 
 class CustomerHome extends Component {
   constructor(props) {
@@ -22,12 +28,58 @@ class CustomerHome extends Component {
     this.setState({
       search_input: "",
       noRecords: 0,
+      locations: [],
     });
 
     this.onChange = this.onChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
     this.onCuisineSelect = this.onCuisineSelect.bind(this);
+    this.getCustomerInfo();
   }
+
+  getCustomerInfo = () => {
+    axios
+      .get(
+        `http://localhost:3001/yelp/profile/customerById/${localStorage.getItem(
+          "customer_id"
+        )}`
+      )
+      .then((response) => {
+        console.log("response");
+        console.log(response.data);
+        if (response.data) {
+          this.setState({
+            customer: response.data[0],
+          });
+          Geocode.fromAddress(response.data[0].city).then(
+            (resp) => {
+              console.log("Locations");
+              console.log(resp.results[0].geometry);
+              //console.log(latitude + ", " + longitude);
+              let coordinates = {
+                lat: resp.results[0].geometry.location.lat,
+                lng: resp.results[0].geometry.location.lng,
+                address: "YOU",
+              };
+              console.log("Coordinates");
+              console.log(coordinates);
+
+              this.setState({
+                center: coordinates,
+              });
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
+        }
+      })
+      .catch((error) => {
+        console.log("Error");
+        console.log(error);
+      });
+  };
+
   componentDidMount() {
     axios
       .get(`http://localhost:3001/yelp/restaurant/search/_`)
@@ -150,6 +202,10 @@ class CustomerHome extends Component {
   };
 
   render() {
+    if (this.state) {
+      console.log("render home");
+      console.log(this.state);
+    }
     let cuisineTag = null;
     let redirectVar = null;
     let messageTag = null;
@@ -196,6 +252,7 @@ class CustomerHome extends Component {
 
     if (this.state && this.state.filteredRestaurants) {
       restaurantsTag = this.state.filteredRestaurants.map((restaurant) => {
+        var imageSrc = `http://localhost:3001/yelp/images/restaurant/${restaurant.restaurant_image}`;
         return (
           <Col sm={3}>
             <Link to={{ pathname: "/restaurant", state: restaurant }}>
@@ -203,7 +260,7 @@ class CustomerHome extends Component {
                 <Card.Img
                   variant="top"
                   style={{ height: "15rem" }}
-                  src="http://localhost:3001/yelp/images/restaurant/restaurant_default.png"
+                  src={imageSrc}
                 />
                 <Card.Body>
                   <Card.Title>{restaurant.restaurant_name}</Card.Title>
@@ -223,6 +280,19 @@ class CustomerHome extends Component {
       );
     }
 
+    let center = null;
+    let locList = [];
+    if (this.state && this.state.filteredRestaurants) {
+      locList = this.state.filteredRestaurants;
+    }
+    if (this.state && this.state.center) {
+      center = this.state.center;
+    }
+    var location = {
+      address: "1919 Fruitdale Avenue",
+      lat: 37.31231,
+      lng: -121.92534,
+    };
     return (
       <div>
         {redirectVar}
@@ -275,6 +345,7 @@ class CustomerHome extends Component {
             <br />
             {messageTag}
             <Row>{restaurantsTag}</Row>
+            <Map locationList={locList} center={location} zoomLevel={10} />
           </center>
         </div>
       </div>

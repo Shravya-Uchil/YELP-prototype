@@ -18,9 +18,9 @@ class AddItem extends Component {
     this.state = {};
 
     this.onChange = this.onChange.bind(this);
-    //this.onImageChange = this.onImageChange.bind(this);
+    this.onImageChange = this.onImageChange.bind(this);
     this.onAdd = this.onAdd.bind(this);
-    //this.onUpload = this.onUpload.bind(this);
+    this.onUpload = this.onUpload.bind(this);
   }
 
   onChange = (e) => {
@@ -71,24 +71,6 @@ class AddItem extends Component {
     e.preventDefault();
     axios.defaults.withCredentials = true;
 
-    /*let item_id = null;
-    let item_name = null;
-    let item_price = null;
-    let item_description = null;
-    let item_ingredients = null;
-    let item_image = null;
-    let item_category = null;
-    if (this.props.location.state) {
-      item_id = this.props.location.state.item_id;
-      item_name = this.props.location.state.item_name;
-      item_price = this.props.location.state.item_price;
-      item_description = this.props.location.state.item_description;
-      item_ingredients = this.props.location.state.item_ingredients;
-      item_image = this.props.location.state.item_image;
-    }
-    if (this.state.menu_category) {
-      item_category = this.state.menu_category.category_name;
-    }*/
     var data = {
       restaurant_id: localStorage.getItem("restaurant_id"),
       item_id: this.state.item_id,
@@ -118,6 +100,40 @@ class AddItem extends Component {
       });
   };
 
+  onUpload = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("item_image", this.state.file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(
+        `http://localhost:3001/yelp/images/item/${this.state.item_id}`,
+        formData,
+        config
+      )
+      .then((response) => {
+        alert("Image uploaded successfully!");
+        this.setState({
+          file_text: "Choose file...",
+          item_image: response.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Error");
+      });
+  };
+
+  onImageChange = (e) => {
+    this.setState({
+      file: e.target.files[0],
+      file_text: e.target.files[0].name,
+    });
+  };
+
   render() {
     let redirectVar = null;
     if (!localStorage.getItem("restaurant_id")) {
@@ -125,32 +141,15 @@ class AddItem extends Component {
     } else if (this.state.isAddDone) {
       redirectVar = <Redirect to="/home" />;
     }
-    /*var item_name = null;
-    var item_price = null;
-    var item_description = null;
-    var item_ingredients = null;
-    var item_image = null;
-    var item_category = null;
 
-    if (this.props.location.state) {
-      item_name = this.state.item_name || this.props.location.state.item_name;
-      item_price =
-        this.state.item_price || this.props.location.state.item_price;
-      item_description =
-        this.state.item_description ||
-        this.props.location.state.item_description;
-      item_ingredients =
-        this.state.item_ingredients ||
-        this.props.location.state.item_ingredients;
-      item_image =
-        this.state.item_image || this.props.location.state.item_image;
-    }*/
     console.log("render");
     console.log(this.state);
     console.log(this.props.location.state);
-    /*if (this.state.menu_category) {
-      item_category = this.state.menu_category.category_name;
-    }*/
+    var imageSrc;
+    var fileText = this.state.file_text || "Choose image..";
+    if (this.state) {
+      imageSrc = `http://localhost:3001/yelp/images/item/${this.state.item_image}`;
+    }
     return (
       <div>
         {redirectVar}
@@ -160,10 +159,7 @@ class AddItem extends Component {
             <Col xs={6} md={4}>
               <center>
                 <Card style={{ width: "18rem", margin: "5%" }}>
-                  <Card.Img
-                    variant="top"
-                    src="http://localhost:3001/yelp/images/item/item_profile.png"
-                  />
+                  <Card.Img variant="top" src={imageSrc} />
                   <Card.Body>
                     <Card.Title>
                       <h3>{this.state.item_name}</h3>
@@ -172,16 +168,18 @@ class AddItem extends Component {
                 </Card>
                 <form onSubmit={this.onUpload}>
                   <br />
-                  <br />
-                  <div class="item-file" style={{ width: "80%" }}>
+                  <div class="custom-file" style={{ width: "80%" }}>
                     <input
                       type="file"
-                      class="item-file-input"
+                      class="custom-file-input"
                       name="item_image"
                       accept="image/*"
                       onChange={this.onImageChange}
                       required
                     />
+                    <label class="custom-file-label" for="item_image">
+                      {fileText}
+                    </label>
                   </div>
                   <br />
                   <br />

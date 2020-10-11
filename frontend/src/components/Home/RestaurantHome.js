@@ -120,8 +120,7 @@ class RestaurantHome extends Component {
     }
     if (this.state && this.state.restaurant) {
       let restaurant = this.state.restaurant;
-      let resImageSrc =
-        "http://localhost:3001/yelp/images/restaurant/restaurant_default.png";
+      let resImageSrc = `http://localhost:3001/yelp/images/restaurant/${this.state.restaurant.restaurant_image}`;
       restaurantDetails = (
         <Card
           bg="light"

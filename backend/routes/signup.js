@@ -58,7 +58,7 @@ router.post("/restaurant", async (req, res) => {
   var encryptedPassword;
   try {
     encryptedPassword = await bcrypt.hash(req.body.password, 12);
-    let sql_query = `CALL register_restaurant('${req.body.restaurant_name}', '${req.body.zip_code}', '${req.body.email_id}', '${encryptedPassword}');`;
+    let sql_query = `CALL register_restaurant('${req.body.restaurant_name}', '${req.body.zip_code}', '${req.body.email_id}', '${encryptedPassword}', '${req.body.lat}', '${req.body.lng}');`;
 
     pool.query(sql_query, (err, result) => {
       if (err) {

@@ -18,9 +18,9 @@ class AddEvent extends Component {
     this.state = {};
 
     this.onChange = this.onChange.bind(this);
-    //this.onImageChange = this.onImageChange.bind(this);
+    this.onImageChange = this.onImageChange.bind(this);
     this.onAdd = this.onAdd.bind(this);
-    //this.onUpload = this.onUpload.bind(this);
+    this.onUpload = this.onUpload.bind(this);
   }
 
   onChange = (e) => {
@@ -68,6 +68,40 @@ class AddEvent extends Component {
       });
   };
 
+  onUpload = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("event_image", this.state.file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(
+        `http://localhost:3001/yelp/images/event/${this.state.event_id}`,
+        formData,
+        config
+      )
+      .then((response) => {
+        alert("Image uploaded successfully!");
+        this.setState({
+          file_text: "Choose file...",
+          event_image: response.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Error");
+      });
+  };
+
+  onImageChange = (e) => {
+    this.setState({
+      file: e.target.files[0],
+      file_text: e.target.files[0].name,
+    });
+  };
+
   render() {
     let redirectVar = null;
     if (!localStorage.getItem("restaurant_id")) {
@@ -75,12 +109,54 @@ class AddEvent extends Component {
     } else if (this.state.isAddDone) {
       redirectVar = <Redirect to="/event" />;
     }
+    var imageSrc;
+    var fileText = this.state.file_text || "Choose image..";
+    if (this.state) {
+      imageSrc = `http://localhost:3001/yelp/images/item/${this.state.event_image}`;
+    }
     return (
       <div>
         {redirectVar}
         <NavBar />
         <Container fluid={true}>
           <Row>
+            <Col xs={6} md={4}>
+              <center>
+                <Card style={{ width: "18rem", margin: "5%" }}>
+                  <Card.Img variant="top" src={imageSrc} />
+                  <Card.Body>
+                    <Card.Title>
+                      <h3>{this.state.item_name}</h3>
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+                <form onSubmit={this.onUpload}>
+                  <br />
+                  <div class="custom-file" style={{ width: "80%" }}>
+                    <input
+                      type="file"
+                      class="custom-file-input"
+                      name="event_image"
+                      accept="image/*"
+                      onChange={this.onImageChange}
+                      required
+                    />
+                    <label class="custom-file-label" for="event_image">
+                      {fileText}
+                    </label>
+                  </div>
+                  <br />
+                  <br />
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    style={{ background: "#d32323" }}
+                  >
+                    Upload
+                  </Button>
+                </form>
+              </center>
+            </Col>
             <Col style={{ margin: "2%" }}>
               <h4>Create Event</h4>
               <br />

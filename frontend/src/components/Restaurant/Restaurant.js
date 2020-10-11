@@ -44,6 +44,28 @@ class Restaurant extends Component {
     console.log("mount");
     localStorage.removeItem("cart_list");
     if (this.props.location.state) {
+      axios
+        .get(
+          `http://localhost:3001/yelp/restaurant/hasReviewed/${localStorage.getItem(
+            "customer_id"
+          )}/${this.props.location.state.restaurant_id}`
+        )
+        .then((response) => {
+          console.log("response");
+          console.log(response.data);
+          if (response.data) {
+            if (response.data[0].result === "REVIEWED") {
+              this.setState({
+                hasReviewed: 1,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.log("Error");
+          console.log(error);
+        });
+
       document.title = this.props.location.state.restaurant_name;
       localStorage.setItem(
         "selected_restaurant_id",
@@ -227,6 +249,7 @@ class Restaurant extends Component {
       cuisine,
       zip_code,
       description,
+      restaurant_image,
       restaurant = this.props.location.state;
 
     if (!localStorage.getItem("customer_id") || !this.props.location.state) {
@@ -239,6 +262,7 @@ class Restaurant extends Component {
       zip_code = restaurant.zip_code;
       cuisine = restaurant.cuisine;
       description = restaurant.description;
+      restaurant_image = restaurant.restaurant_image;
     }
     if (
       this.state &&
@@ -258,6 +282,9 @@ class Restaurant extends Component {
     }
     let isReviewAdded = false;
     if (this.state && this.state.isAddDone) {
+      isReviewAdded = true;
+    }
+    if (this.state && this.state.hasReviewed) {
       isReviewAdded = true;
     }
     let orderTypeList = ["Delivery", "Pickup"];
@@ -283,6 +310,9 @@ class Restaurant extends Component {
       console.log("redirect");
       console.log(redirect);
     }
+    if (this.state) {
+      var imageSrc = `http://localhost:3001/yelp/images/restaurant/${restaurant_image}`;
+    }
     return (
       <div>
         {redirect}
@@ -297,9 +327,7 @@ class Restaurant extends Component {
               <Col>
                 <Card.Img
                   style={{ width: "20rem", height: "20rem" }}
-                  src={
-                    "http://localhost:3001/yelp/images/restaurant/restaurant_default.png"
-                  }
+                  src={imageSrc}
                 />
               </Col>
               <Card.Body>

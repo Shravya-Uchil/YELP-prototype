@@ -13,7 +13,7 @@ class Profile extends Component {
     } else if (localStorage.getItem("restaurant_id")) {
       profile = <RestaurantProfile />;
     } else {
-      redirectVar = <Redirect to="/" />;
+      redirectVar = <Redirect to="/home" />;
     }
     return (
       <div>

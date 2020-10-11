@@ -117,7 +117,7 @@ router.post("/register", (req, res) => {
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
-      res.end(JSON.stringify(result[0][0]));
+      res.end(result[0][0].status);
     } else {
       res.writeHead(500, {
         "Content-Type": "text/plain",

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { restaurantSignup } from "../../actions/signupActions";
 import { Redirect } from "react-router";
 import NavBar from "../LandingPage/Navbar.js";
+import Geocode from "react-geocode";
 
 class RestaurantCreate extends Component {
   constructor(props) {
@@ -27,18 +28,38 @@ class RestaurantCreate extends Component {
       alert("Passwords do not match!!!");
       return;
     }
-    const data = {
-      restaurant_name: this.state.restName,
-      zip_code: this.state.zipcode,
-      email_id: this.state.email_id,
-      password: this.state.password,
-    };
 
-    this.props.restaurantSignup(data);
+    Geocode.fromAddress(this.state.zipcode).then(
+      (resp) => {
+        console.log("Locations");
+        console.log(resp.results[0].geometry);
+        //console.log(latitude + ", " + longitude);
+        /*let coordinates = {
+          lat: resp.results[0].geometry.location.lat,
+          lng: resp.results[0].geometry.location.lng,
+          address: "YOU",
+        };
+        console.log("Coordinates");
+        console.log(coordinates);*/
+        const data = {
+          restaurant_name: this.state.restName,
+          zip_code: this.state.zipcode,
+          email_id: this.state.email_id,
+          password: this.state.password,
+          lat: resp.results[0].geometry.location.lat,
+          lng: resp.results[0].geometry.location.lng,
+        };
+        this.props.restaurantSignup(data);
 
-    this.setState({
-      signupDone: 1,
-    });
+        this.setState({
+          signupDone: 1,
+        });
+      },
+      (error) => {
+        console.error(error);
+        alert("Please enter a valid zip code");
+      }
+    );
     /*axios.defaults.withCredentials = true;
     //make a post request with the user data
     axios

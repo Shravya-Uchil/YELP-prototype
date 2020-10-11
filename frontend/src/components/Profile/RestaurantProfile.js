@@ -16,7 +16,9 @@ class RestaurantProfile extends Component {
     super(props);
     this.state = {};
     this.onChange = this.onChange.bind(this);
+    this.onImageChange = this.onImageChange.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.onUpload = this.onUpload.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
   }
 
@@ -42,6 +44,8 @@ class RestaurantProfile extends Component {
           yelp_delivery:
             response.data[0].yelp_delivery || this.state.yelp_delivery,
           cuisine: response.data[0].cuisine || this.state.cuisine,
+          restaurant_image:
+            response.data[0].restaurant_image || this.state.restaurant_image,
         };
         this.setState(resData);
         console.log("State:", this.state);
@@ -52,31 +56,39 @@ class RestaurantProfile extends Component {
       });
   }
 
-  /*componentWillReceiveProps(nextProps) {
-    console.log("We in props received, next prop is: ", nextProps);
-    if (nextProps.customer) {
-      var { customer } = nextProps;
+  onUpload = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("res_image", this.state.file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(
+        `http://localhost:3001/yelp/images/restaurant/${this.state.restaurant_id}`,
+        formData,
+        config
+      )
+      .then((response) => {
+        alert("Image uploaded successfully!");
+        this.setState({
+          file_text: "Choose file...",
+          restaurant_image: response.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Error");
+      });
+  };
 
-      var customerData = {
-        //customer_id: customer.customer_id,
-        cust_name: customer.cust_name || this.state.cust_name,
-        email_id: customer.email_id || this.state.email_id,
-        city: customer.city || this.state.city,
-        state: customer.state || this.state.state,
-        country: customer.country || this.state.country,
-        // address: customer.address,
-        //phone_number: customer.phone_number,
-        cust_image: customer.cust_image || this.state.cust_image,
-        password: customer.password || this.state.password,
-        //dob: customer.dob,
-        nick_name: customer.nick_name || this.state.nick_name,
-        headline: customer.headline || this.state.headline,
-        //yelp_since: customer.yelp_since,
-        //things_love: customer.things_love,
-      };
-      this.setState(customerData);
-    }
-  }*/
+  onImageChange = (e) => {
+    this.setState({
+      file: e.target.files[0],
+      file_text: e.target.files[0].name,
+    });
+  };
 
   onChange = (e) => {
     this.setState({
@@ -138,8 +150,10 @@ class RestaurantProfile extends Component {
   };
 
   render() {
-    var imageSrc =
-      "http://localhost:3001/yelp/images/restaurant/restaurant_default.jpg";
+    var fileText = this.state.file_text || "Choose image..";
+    if (this.state) {
+      var imageSrc = `http://localhost:3001/yelp/images/restaurant/${this.state.restaurant_image}`;
+    }
     this.onRefresh();
     return (
       <div>
@@ -157,18 +171,20 @@ class RestaurantProfile extends Component {
                     </Card.Title>
                   </Card.Body>
                 </Card>
-                <form onSubmit="">
-                  <br />
+                <form onSubmit={this.onUpload}>
                   <br />
                   <div class="custom-file" style={{ width: "80%" }}>
                     <input
                       type="file"
                       class="custom-file-input"
-                      name="cust_image"
+                      name="res_image"
                       accept="image/*"
                       onChange={this.onImageChange}
                       required
                     />
+                    <label class="custom-file-label" for="res_image">
+                      {fileText}
+                    </label>
                   </div>
                   <br />
                   <br />

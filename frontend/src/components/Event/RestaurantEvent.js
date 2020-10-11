@@ -52,6 +52,7 @@ class RestaurantEvent extends Component {
     }
     if (this.state && this.state.allEvents) {
       eventsTag = this.state.allEvents.map((event) => {
+        var imageSrc = `http://localhost:3001/yelp/images/event/${event.event_image}`;
         return (
           <Col sm={3}>
             <Card bg="white" style={{ width: "18rem" }}>
@@ -59,7 +60,7 @@ class RestaurantEvent extends Component {
                 <Card.Img
                   variant="top"
                   style={{ height: "15rem" }}
-                  src="http://localhost:3001/yelp/images/event/event_default.png"
+                  src={imageSrc}
                 />
                 <Card.Title>{event.event_name}</Card.Title>
               </Link>

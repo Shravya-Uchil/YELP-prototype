@@ -121,15 +121,12 @@ class EventDetails extends Component {
     } else {
       if (this.state && this.state.registered_customers) {
         registered_customers = this.state.registered_customers.map((cust) => {
+          var imageSrc = `http://localhost:3001/yelp/images/customer/${cust.cust_image}`;
           return (
             <Col sm={3} style={{ margin: "2%" }}>
-              <Card bg="white" style={{ width: "18rem" }}>
+              <Card bg="white" style={{ width: "15rem" }}>
                 <Link to={{ pathname: "/customercard", state: cust }}>
-                  <Card.Img
-                    variant="top"
-                    style={{ height: "15rem" }}
-                    src="http://localhost:3001/yelp/images/user/user_profile.png"
-                  />
+                  <Card.Img variant="top" src={imageSrc} />
                   <Card.Title>{cust.cust_name}</Card.Title>
                 </Link>
               </Card>
@@ -139,16 +136,13 @@ class EventDetails extends Component {
       }
     }
 
+    var eventSrc = `http://localhost:3001/yelp/images/event/${this.props.location.state.event_image}`;
     eventTag = (
       <Card
         bg="white"
         style={{ width: "70rem", height: "30rem", margin: "2%" }}
       >
-        <Card.Img
-          variant="top"
-          style={{ height: "15rem", width: "15rem" }}
-          src="http://localhost:3001/yelp/images/event/event_default.png"
-        />
+        <Card.Img variant="top" style={{ width: "15rem" }} src={eventSrc} />
         <Card.Title>{this.props.location.state.event_name}</Card.Title>
         <Card.Body>
           <Card.Text>{this.props.location.state.event_description}</Card.Text>

@@ -158,4 +158,30 @@ router.post("/restaurantReview", async (req, res) => {
   });
 });
 
+router.get("/hasReviewed/:customer_id/:restaurant_id", (req, res) => {
+  console.log(
+    "get has reviewed " +
+      req.params.customer_id +
+      " , " +
+      req.params.restaurant_id
+  );
+  let sql = `CALL get_hasReviewed(${req.params.customer_id}, ${req.params.restaurant_id});`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error in Data");
+    }
+    console.log(result);
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
 module.exports = router;

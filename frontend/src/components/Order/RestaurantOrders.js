@@ -21,6 +21,7 @@ class RestaurantOrders extends Component {
       deliveryStateValue: "Change Delivery Status",
       stateValue: "Change Order Status",
       filter_title: "Order Status",
+      noRecords: 0,
     };
 
     this.changeStateValue = this.changeStateValue.bind(this);
@@ -44,6 +45,7 @@ class RestaurantOrders extends Component {
           this.setState({
             orders_history: response.data,
             orders_history_filtered: response.data,
+            noRecords: 0,
           });
         }
       })
@@ -51,6 +53,7 @@ class RestaurantOrders extends Component {
         if (err.response && err.response.data) {
           this.setState({
             message: err.response.data,
+            noRecords: 1,
           });
         }
       });

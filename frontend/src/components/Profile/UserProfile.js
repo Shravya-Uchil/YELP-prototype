@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import axios from "axios";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {
@@ -22,9 +22,9 @@ class CustomerProfile extends Component {
     super(props);
     this.state = {};
     this.onChange = this.onChange.bind(this);
-    //this.onImageChange = this.onImageChange.bind(this);
+    this.onImageChange = this.onImageChange.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
-    //this.onUpload = this.onUpload.bind(this);
+    this.onUpload = this.onUpload.bind(this);
   }
 
   componentWillMount() {
@@ -81,6 +81,7 @@ class CustomerProfile extends Component {
         things_love: customer.things_love || this.state.things_love,
         find_me: customer.find_me || this.state.find_me,
         blog_website: customer.blog_website || this.state.blog_website,
+        customer_id: customer.customer_id || this.state.customer_id,
       };
       this.setState(customerData);
       console.log("customer data");
@@ -91,6 +92,40 @@ class CustomerProfile extends Component {
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
+    });
+  };
+
+  onUpload = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("cust_image", this.state.file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(
+        `http://localhost:3001/yelp/images/customer/${this.state.customer_id}`,
+        formData,
+        config
+      )
+      .then((response) => {
+        alert("Image uploaded successfully!");
+        this.setState({
+          file_text: "Choose file...",
+          cust_image: response.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Error");
+      });
+  };
+
+  onImageChange = (e) => {
+    this.setState({
+      file: e.target.files[0],
+      file_text: e.target.files[0].name,
     });
   };
 
@@ -115,7 +150,11 @@ class CustomerProfile extends Component {
   };
 
   render() {
-    var imageSrc = "http://localhost:3001/yelp/images/user/user_profile.png";
+    var imageSrc;
+    var fileText = this.state.file_text || "Choose image..";
+    if (this.state) {
+      imageSrc = `http://localhost:3001/yelp/images/customer/${this.state.cust_image}`;
+    }
     return (
       <div>
         <Container fluid={true}>
@@ -130,6 +169,7 @@ class CustomerProfile extends Component {
                     </Card.Title>
                   </Card.Body>
                 </Card>
+                <br />
                 <form onSubmit={this.onUpload}>
                   <div class="custom-file" style={{ width: "80%" }}>
                     <input
@@ -140,6 +180,9 @@ class CustomerProfile extends Component {
                       onChange={this.onImageChange}
                       required
                     />
+                    <label class="custom-file-label" for="cust_image">
+                      {fileText}
+                    </label>
                   </div>
                   <br />
                   <br />

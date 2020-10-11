@@ -14,7 +14,7 @@ class Home extends Component {
     } else if (localStorage.getItem("restaurant_id")) {
       home = <RestaurantHome />;
     } else {
-      redirectVar = <Redirect to="/" />;
+      redirectVar = <Redirect to="/login" />;
     }
     return (
       <div>

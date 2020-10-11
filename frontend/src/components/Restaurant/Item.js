@@ -169,6 +169,9 @@ class Item extends Component {
         </div>
       );
     }
+    if (this.state) {
+      var imageSrc = `http://localhost:3001/yelp/images/item/${this.props.menu_item.item_image}`;
+    }
     return (
       <div>
         <Card bg="white" style={{ width: "70rem", margin: "2%" }}>
@@ -177,7 +180,7 @@ class Item extends Component {
               <Card.Img
                 style={{ width: "12rem", height: "9rem" }}
                 alt=""
-                src={"http://localhost:3001/yelp/images/item/item_default.png"}
+                src={imageSrc}
               />
             </Col>
             <Col>
@@ -210,11 +213,7 @@ class Item extends Component {
           </Modal.Header>
           <Modal.Body>
             <center>
-              <img
-                src="http://localhost:3001/yelp/images/item/item_default.png"
-                width="100%"
-                alt=""
-              />
+              <img src={imageSrc} width="100%" alt="" />
               <p>{this.props.menu_item.item_description}</p>
               Quantity:{" "}
               <input

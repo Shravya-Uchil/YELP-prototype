@@ -40,6 +40,9 @@ class CustomerCard extends Component {
       redirectVar = <Redirect to="/login" />;
     }
 
+    if (this.state) {
+      var imgSrc = `http://localhost:3001/yelp/images/customer/${this.state.customer.cust_image}`;
+    }
     if (this.state && this.state.customer) {
       customerTag = (
         <Row>
@@ -47,13 +50,9 @@ class CustomerCard extends Component {
             <Card
               bg="light"
               text="dark"
-              style={{ width: "70rem", height: "20rem", margin: "2%" }}
+              style={{ width: "70rem", height: "25rem", margin: "2%" }}
             >
-              <Card.Img
-                variant="top"
-                style={{ height: "15rem", width: "15rem" }}
-                src="http://localhost:3001/yelp/images/user/user_profile.png"
-              />
+              <Card.Img variant="top" style={{ width: "15rem" }} src={imgSrc} />
               <Card.Title>{this.state.customer.cust_name || ""}</Card.Title>
             </Card>
           </Col>
@@ -61,7 +60,7 @@ class CustomerCard extends Component {
             <Card
               bg="light"
               text="dark"
-              style={{ width: "70rem", height: "20rem", margin: "2%" }}
+              style={{ width: "70rem", height: "25rem", margin: "2%" }}
             >
               <Card.Body>
                 <Card.Text>
