@@ -13,6 +13,7 @@ import {
 import { Link } from "react-router-dom";
 import NavBar from "../LandingPage/Navbar.js";
 import { Redirect } from "react-router";
+import serverAddress from "../../config";
 
 class CustomerOrderHistory extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class CustomerOrderHistory extends Component {
   getOrderHistory = () => {
     axios
       .get(
-        `http://localhost:3001/yelp/order/customer/allOrders/${localStorage.getItem(
+        `${serverAddress}/yelp/order/customer/allOrders/${localStorage.getItem(
           "customer_id"
         )}`
       )

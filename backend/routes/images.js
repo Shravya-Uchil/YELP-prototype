@@ -25,9 +25,6 @@ const customerUpload = multer({
 }).single("cust_image");
 
 router.post("/customer/:customer_id", (req, res) => {
-  console.log("post cust image");
-  console.log(req.params.customer_id);
-  console.log(req.file);
   customerUpload(req, res, function (err) {
     if (!err) {
       let sql = `UPDATE customer SET cust_image = '${req.file.filename}' WHERE customer_id = ${req.params.customer_id}`;

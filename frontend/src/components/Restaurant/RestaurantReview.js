@@ -6,6 +6,7 @@ import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class RestaurantReview extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class RestaurantReview extends Component {
       res_id = this.props.location.state.restaurant_id;
     }
     axios
-      .get(`http://localhost:3001/yelp/restaurant/restaurantReview/${res_id}`)
+      .get(`${serverAddress}/yelp/restaurant/restaurantReview/${res_id}`)
       .then((response) => {
         var cuisines = [];
         console.log("response");

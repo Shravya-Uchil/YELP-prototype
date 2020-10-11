@@ -17,6 +17,7 @@ import cookie from "react-cookies";
 import NavBar from "../LandingPage/Navbar.js";
 import { Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
+import serverAddress from "../../config";
 
 class Restaurant extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class Restaurant extends Component {
     if (this.props.location.state) {
       axios
         .get(
-          `http://localhost:3001/yelp/restaurant/hasReviewed/${localStorage.getItem(
+          `${serverAddress}/yelp/restaurant/hasReviewed/${localStorage.getItem(
             "customer_id"
           )}/${this.props.location.state.restaurant_id}`
         )
@@ -78,7 +79,7 @@ class Restaurant extends Component {
     if (this.props.location.state) {
       axios
         .get(
-          `http://localhost:3001/yelp/menu/category/${this.props.location.state.restaurant_id}`
+          `${serverAddress}/yelp/menu/category/${this.props.location.state.restaurant_id}`
         )
         .then((response) => {
           if (response.data[0]) {
@@ -100,7 +101,7 @@ class Restaurant extends Component {
     if (this.props.location.state) {
       return axios
         .get(
-          `http://localhost:3001/yelp/menu/items/${this.props.location.state.restaurant_id}`
+          `${serverAddress}/yelp/menu/items/${this.props.location.state.restaurant_id}`
         )
         .then((response) => {
           console.log("Items get");
@@ -168,7 +169,7 @@ class Restaurant extends Component {
         console.log("placing order");
         console.log(data);
         axios
-          .post(`http://localhost:3001/yelp/order/customer/placeorder`, data)
+          .post(`${serverAddress}/yelp/order/customer/placeorder`, data)
           .then((response) => {
             localStorage.removeItem("cart_items");
             //alert("Your order is placed!");
@@ -212,7 +213,7 @@ class Restaurant extends Component {
     console.log("Add review");
     console.log(data);
     axios
-      .post(`http://localhost:3001/yelp/restaurant/restaurantReview`, data)
+      .post(`${serverAddress}/yelp/restaurant/restaurantReview`, data)
       .then((response) => {
         alert("Review Added!");
         this.setState({
@@ -311,7 +312,7 @@ class Restaurant extends Component {
       console.log(redirect);
     }
     if (this.state) {
-      var imageSrc = `http://localhost:3001/yelp/images/restaurant/${restaurant_image}`;
+      var imageSrc = `${serverAddress}/yelp/images/restaurant/${restaurant_image}`;
     }
     return (
       <div>

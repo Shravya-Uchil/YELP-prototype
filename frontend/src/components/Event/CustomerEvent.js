@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class CustomerEvent extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class CustomerEvent extends Component {
   getRegisteredEvents = () => {
     axios
       .get(
-        `http://localhost:3001/yelp/event/customer/registration/${localStorage.getItem(
+        `${serverAddress}/yelp/event/customer/registration/${localStorage.getItem(
           "customer_id"
         )}`
       )
@@ -59,7 +60,7 @@ class CustomerEvent extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:3001/yelp/event/all`)
+      .get(`${serverAddress}/yelp/event/all`)
       .then((response) => {
         var cuisines = [];
         console.log("response");
@@ -94,7 +95,7 @@ class CustomerEvent extends Component {
           ? "_"
           : this.state.search_input;
       axios
-        .get(`http://localhost:3001/yelp/event/${searchInput}`)
+        .get(`${serverAddress}/yelp/event/${searchInput}`)
         .then((response) => {
           if (response.data) {
             if (response.data[0].result === "NO_RECORD") {
@@ -164,7 +165,7 @@ class CustomerEvent extends Component {
       console.log("render");
       eventsTag = this.state.filteredEvents.map((event) => {
         console.log(event);
-        var imageSrc = `http://localhost:3001/yelp/images/event/${event.event_image}}`;
+        var imageSrc = `${serverAddress}/yelp/images/event/${event.event_image}}`;
         return (
           <Col sm={3}>
             <Card bg="white" style={{ width: "18rem" }}>

@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const db = require("../mysqlDB.js");
 
 router.get("/search/:search_str", (req, res) => {
-  console.log("Get all resturants matching: " + req.params.search_str);
   let sql_query = `CALL search_restaurants('${req.params.search_str}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
@@ -16,8 +15,6 @@ router.get("/search/:search_str", (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -27,7 +24,6 @@ router.get("/search/:search_str", (req, res) => {
 });
 
 router.get("/restaurant/:restaurant_id", (req, res) => {
-  console.log("Get restaurant details for:" + req.params.restaurant_id);
   let sql_query = `CALL get_restaurant_byId('${req.params.restaurant_id}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
@@ -39,8 +35,6 @@ router.get("/restaurant/:restaurant_id", (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -50,7 +44,6 @@ router.get("/restaurant/:restaurant_id", (req, res) => {
 });
 
 router.post("/restaurant", async (req, res) => {
-  console.log("Update Restaurant");
   var encryptedPassword = "NULL";
   try {
     if (req.body.password && req.body.password !== "") {
@@ -72,8 +65,6 @@ router.post("/restaurant", async (req, res) => {
         result.length > 0 &&
         result[0][0].status === "RESTAURANT_UPDATED"
       ) {
-        console.log("Success:");
-        console.log(result);
         res.writeHead(200, {
           "Content-Type": "text/plain",
         });
@@ -83,8 +74,6 @@ router.post("/restaurant", async (req, res) => {
         result.length > 0 &&
         result[0][0].status === "NO_RECORD"
       ) {
-        console.log("No record found:");
-        console.log(result);
         res.writeHead(401, {
           "Content-Type": "text/plain",
         });
@@ -102,7 +91,6 @@ router.post("/restaurant", async (req, res) => {
 });
 
 router.get("/restaurantReview/:restaurant_id", (req, res) => {
-  console.log("Get reviews for:" + req.params.restaurant_id);
   let sql_query = `CALL get_reviews('${req.params.restaurant_id}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
@@ -114,8 +102,6 @@ router.get("/restaurantReview/:restaurant_id", (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -125,7 +111,6 @@ router.get("/restaurantReview/:restaurant_id", (req, res) => {
 });
 
 router.post("/restaurantReview", async (req, res) => {
-  console.log("Add review");
   let sql = `CALL add_review('${req.body.review_text}', '${req.body.review_rating}', '${req.body.restaurant_id}' ,'${req.body.customer_id}');`;
   db.query(sql, (err, result) => {
     if (err) {
@@ -137,8 +122,6 @@ router.post("/restaurantReview", async (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0].status === "REVIEW_ADDED") {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -148,8 +131,6 @@ router.post("/restaurantReview", async (req, res) => {
       result.length > 0 &&
       result[0][0].status === "REVIEW_EXISTS"
     ) {
-      console.log("Review exists:");
-      console.log(result);
       res.writeHead(401, {
         "Content-Type": "text/plain",
       });
@@ -159,12 +140,6 @@ router.post("/restaurantReview", async (req, res) => {
 });
 
 router.get("/hasReviewed/:customer_id/:restaurant_id", (req, res) => {
-  console.log(
-    "get has reviewed " +
-      req.params.customer_id +
-      " , " +
-      req.params.restaurant_id
-  );
   let sql = `CALL get_hasReviewed(${req.params.customer_id}, ${req.params.restaurant_id});`;
   db.query(sql, (err, result) => {
     if (err) {

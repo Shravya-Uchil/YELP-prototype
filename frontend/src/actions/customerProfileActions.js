@@ -1,11 +1,12 @@
 import axios from "axios";
 import { GET_CUSTOMER, UPDATE_CUSTOMER } from "../actionTypes";
+import serverAddress from "../config";
 
 export const getCustomerDetails = () => (dispatch) => {
   console.log("get action");
   axios
     .get(
-      `http://localhost:3001/yelp/profile/customer/${localStorage.getItem(
+      `${serverAddress}/yelp/profile/customer/${localStorage.getItem(
         "email_id"
       )}`
     )
@@ -24,7 +25,7 @@ export const getCustomerDetails = () => (dispatch) => {
 export const updateCustomerDetails = (customerDetails) => (dispatch) => {
   axios.defaults.withCredentials = true;
   axios
-    .post(`http://localhost:3001/yelp/profile/customer`, customerDetails)
+    .post(`${serverAddress}/yelp/profile/customer`, customerDetails)
     .then((response) => response.data)
     .then((data) => {
       if (data === "CUSTOMER_UPDATED") {

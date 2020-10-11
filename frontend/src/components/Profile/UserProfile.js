@@ -16,6 +16,7 @@ import {
   ButtonGroup,
   Card,
 } from "react-bootstrap";
+import serverAddress from "../../config";
 
 class CustomerProfile extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class CustomerProfile extends Component {
     console.log("We are here, emailid is " + localStorage.getItem("email_id"));
     /*axios
       .get(
-        `http://localhost:3001/yelp/profile/customer/${localStorage.getItem(
+        `${serverAddress}/yelp/profile/customer/${localStorage.getItem(
           "email_id"
         )}`
       )
@@ -106,7 +107,7 @@ class CustomerProfile extends Component {
     };
     axios
       .post(
-        `http://localhost:3001/yelp/images/customer/${this.state.customer_id}`,
+        `${serverAddress}/yelp/images/customer/${this.state.customer_id}`,
         formData,
         config
       )
@@ -135,7 +136,7 @@ class CustomerProfile extends Component {
     /*axios.defaults.withCredentials = true;
     let data = Object.assign({}, this.state);
     axios
-      .post(`http://localhost:3001/yelp/profile/customer`, data)
+      .post(`${serverAddress}/yelp/profile/customer`, data)
       .then((response) => {
         console.log("Updated");
         alert("Updated profile");
@@ -153,7 +154,7 @@ class CustomerProfile extends Component {
     var imageSrc;
     var fileText = this.state.file_text || "Choose image..";
     if (this.state) {
-      imageSrc = `http://localhost:3001/yelp/images/customer/${this.state.cust_image}`;
+      imageSrc = `${serverAddress}/yelp/images/customer/${this.state.cust_image}`;
     }
     return (
       <div>

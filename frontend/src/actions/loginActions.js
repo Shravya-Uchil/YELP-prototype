@@ -1,13 +1,14 @@
 import { CUSTOMER_LOGIN, CUSTOMER_LOGOUT } from "../actionTypes";
 import axios from "axios";
+import serverAddress from "../config";
 
 export const customerLogin = (loginDetails, type) => (dispatch) => {
   axios.defaults.withCredentials = true;
   var url = "";
   if (type === "Customer") {
-    url = "http://localhost:3001/yelp/login/customer";
+    url = `${serverAddress}/yelp/login/customer`;
   } else {
-    url = "http://localhost:3001/yelp/login/restaurant";
+    url = `${serverAddress}/yelp/login/restaurant`;
   }
   console.log("URL: " + url);
   axios

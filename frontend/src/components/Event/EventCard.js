@@ -15,6 +15,7 @@ import {
 import FontAwesomeIcon from "react-fontawesome";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class EventDetails extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class EventDetails extends Component {
   componentDidMount() {
     axios
       .get(
-        `http://localhost:3001/yelp/event/restaurant/${localStorage.getItem(
+        `${serverAddress}/yelp/event/restaurant/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -62,7 +63,7 @@ class EventDetails extends Component {
     }
     if (this.state && this.state.allEvents) {
       eventsTag = this.state.allEvents.map((event) => {
-        var imageSrc = `http://localhost:3001/yelp/images/event/${event.event_image}`;
+        var imageSrc = `${serverAddress}/yelp/images/event/${event.event_image}`;
         return (
           <Col sm={3}>
             <Card bg="white" style={{ width: "18rem" }}>

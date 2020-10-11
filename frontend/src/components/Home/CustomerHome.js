@@ -17,6 +17,7 @@ import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Map from "../Map/Map";
 import Geocode from "react-geocode";
+import serverAddress from "../../config";
 
 Geocode.setApiKey("AIzaSyAIzrgRfxiIcZhQe3Qf5rIIRx6exhZPwwE");
 Geocode.setLanguage("en");
@@ -40,7 +41,7 @@ class CustomerHome extends Component {
   getCustomerInfo = () => {
     axios
       .get(
-        `http://localhost:3001/yelp/profile/customerById/${localStorage.getItem(
+        `${serverAddress}/yelp/profile/customerById/${localStorage.getItem(
           "customer_id"
         )}`
       )
@@ -82,7 +83,7 @@ class CustomerHome extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:3001/yelp/restaurant/search/_`)
+      .get(`${serverAddress}/yelp/restaurant/search/_`)
       .then((response) => {
         var cuisines = [];
         console.log("response");
@@ -175,7 +176,7 @@ class CustomerHome extends Component {
           ? "_"
           : this.state.search_input;
       axios
-        .get(`http://localhost:3001/yelp/restaurant/search/${searchInput}`)
+        .get(`${serverAddress}/yelp/restaurant/search/${searchInput}`)
         .then((response) => {
           if (response.data) {
             if (response.data[0].result === "NO_RECORD") {
@@ -252,7 +253,7 @@ class CustomerHome extends Component {
 
     if (this.state && this.state.filteredRestaurants) {
       restaurantsTag = this.state.filteredRestaurants.map((restaurant) => {
-        var imageSrc = `http://localhost:3001/yelp/images/restaurant/${restaurant.restaurant_image}`;
+        var imageSrc = `${serverAddress}/yelp/images/restaurant/${restaurant.restaurant_image}`;
         return (
           <Col sm={3}>
             <Link to={{ pathname: "/restaurant", state: restaurant }}>

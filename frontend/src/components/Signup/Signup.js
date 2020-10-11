@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { customerSignup } from "../../actions/signupActions";
 import { Redirect } from "react-router";
 import NavBar from "../LandingPage/Navbar.js";
+import serverAddress from "../../config";
 
 class Create extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class Create extends Component {
     /*axios.defaults.withCredentials = true;
     //make a post request with the user data
     axios
-      .post("http://localhost:3001/yelp/signup/customer", data)
+      .post("${serverAddress}/yelp/signup/customer", data)
       .then((response) => {
         console.log("Status Code : ", response.status);
         if (response.status === 200) {

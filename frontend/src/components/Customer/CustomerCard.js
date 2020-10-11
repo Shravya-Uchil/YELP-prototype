@@ -5,6 +5,7 @@ import axios from "axios";
 import { Col, Row } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
+import serverAddress from "../../config";
 
 class CustomerCard extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class CustomerCard extends Component {
   componentDidMount() {
     axios
       .get(
-        `http://localhost:3001/yelp/profile/customerById/${this.props.location.state.customer_id}`
+        `${serverAddress}/yelp/profile/customerById/${this.props.location.state.customer_id}`
       )
       .then((response) => {
         console.log("response");
@@ -41,7 +42,7 @@ class CustomerCard extends Component {
     }
 
     if (this.state) {
-      var imgSrc = `http://localhost:3001/yelp/images/customer/${this.state.customer.cust_image}`;
+      var imgSrc = `${serverAddress}/yelp/images/customer/${this.state.customer.cust_image}`;
     }
     if (this.state && this.state.customer) {
       customerTag = (

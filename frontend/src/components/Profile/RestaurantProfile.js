@@ -10,6 +10,7 @@ import {
   Card,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class RestaurantProfile extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class RestaurantProfile extends Component {
   componentWillMount() {
     axios
       .get(
-        `http://localhost:3001/yelp/profile/restaurant/${localStorage.getItem(
+        `${serverAddress}/yelp/profile/restaurant/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -67,7 +68,7 @@ class RestaurantProfile extends Component {
     };
     axios
       .post(
-        `http://localhost:3001/yelp/images/restaurant/${this.state.restaurant_id}`,
+        `${serverAddress}/yelp/images/restaurant/${this.state.restaurant_id}`,
         formData,
         config
       )
@@ -133,7 +134,7 @@ class RestaurantProfile extends Component {
     console.log("data");
     console.log(data);
     axios
-      .post(`http://localhost:3001/yelp/profile/restaurant`, data)
+      .post(`${serverAddress}/yelp/profile/restaurant`, data)
       .then((response) => {
         console.log("Updated done");
         console.log(response);
@@ -152,7 +153,7 @@ class RestaurantProfile extends Component {
   render() {
     var fileText = this.state.file_text || "Choose image..";
     if (this.state) {
-      var imageSrc = `http://localhost:3001/yelp/images/restaurant/${this.state.restaurant_image}`;
+      var imageSrc = `${serverAddress}/yelp/images/restaurant/${this.state.restaurant_image}`;
     }
     this.onRefresh();
     return (

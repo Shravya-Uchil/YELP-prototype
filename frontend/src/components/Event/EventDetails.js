@@ -6,6 +6,7 @@ import { Button, Col, Container } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class EventDetails extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class EventDetails extends Component {
     console.log("Register to event");
     console.log(data);
     axios
-      .post(`http://localhost:3001/yelp/event/register`, data)
+      .post(`${serverAddress}/yelp/event/register`, data)
       .then((response) => {
         console.log("Registered");
         alert("Registered to event!!");
@@ -44,7 +45,7 @@ class EventDetails extends Component {
     if (localStorage.getItem("customer_id")) {
       axios
         .get(
-          `http://localhost:3001/yelp/event/customer/isRegistered/${localStorage.getItem(
+          `${serverAddress}/yelp/event/customer/isRegistered/${localStorage.getItem(
             "customer_id"
           )}/${this.props.location.state.event_id}`
         )
@@ -66,7 +67,7 @@ class EventDetails extends Component {
     } else {
       axios
         .get(
-          `http://localhost:3001/yelp/event/restaurant/registration/${this.props.location.state.event_id}`
+          `${serverAddress}/yelp/event/restaurant/registration/${this.props.location.state.event_id}`
         )
         .then((response) => {
           console.log("response cust");
@@ -121,7 +122,7 @@ class EventDetails extends Component {
     } else {
       if (this.state && this.state.registered_customers) {
         registered_customers = this.state.registered_customers.map((cust) => {
-          var imageSrc = `http://localhost:3001/yelp/images/customer/${cust.cust_image}`;
+          var imageSrc = `${serverAddress}/yelp/images/customer/${cust.cust_image}`;
           return (
             <Col sm={3} style={{ margin: "2%" }}>
               <Card bg="white" style={{ width: "15rem" }}>
@@ -136,7 +137,7 @@ class EventDetails extends Component {
       }
     }
 
-    var eventSrc = `http://localhost:3001/yelp/images/event/${this.props.location.state.event_image}`;
+    var eventSrc = `${serverAddress}/yelp/images/event/${this.props.location.state.event_image}`;
     eventTag = (
       <Card
         bg="white"

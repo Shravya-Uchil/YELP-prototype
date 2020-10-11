@@ -13,6 +13,7 @@ import {
 import { Link } from "react-router-dom";
 import NavBar from "../LandingPage/Navbar.js";
 import { Redirect } from "react-router";
+import serverAddress from "../../config";
 
 class RestaurantOrders extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class RestaurantOrders extends Component {
   getOrderHistory = () => {
     axios
       .get(
-        `http://localhost:3001/yelp/order/restaurant/allOrders/${localStorage.getItem(
+        `${serverAddress}/yelp/order/restaurant/allOrders/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -90,7 +91,7 @@ class RestaurantOrders extends Component {
       };
       axios
         .post(
-          `http://localhost:3001/yelp/order/restaurant/updateDeliveryStatus`,
+          `${serverAddress}/yelp/order/restaurant/updateDeliveryStatus`,
           data
         )
         .then((response) => {
@@ -129,10 +130,7 @@ class RestaurantOrders extends Component {
         order_status: this.state.order_status,
       };
       axios
-        .post(
-          `http://localhost:3001/yelp/order/restaurant/updateOrderStatus`,
-          data
-        )
+        .post(`${serverAddress}/yelp/order/restaurant/updateOrderStatus`, data)
         .then((response) => {
           console.log("response");
           console.log(response);

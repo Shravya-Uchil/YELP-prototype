@@ -4,6 +4,7 @@ import { Button, Container, Table, Card } from "react-bootstrap";
 import NavBar from "../LandingPage/Navbar.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class OrderDetails extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class OrderDetails extends Component {
 
       axios
         .get(
-          `http://localhost:3001/yelp/order/orderitems/${this.props.location.state.order_details.order_id}`
+          `${serverAddress}/yelp/order/orderitems/${this.props.location.state.order_details.order_id}`
         )
         .then((response) => {
           if (response.data[0]) {

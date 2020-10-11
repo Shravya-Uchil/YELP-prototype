@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { Redirect } from "react-router";
 import NavBar from "../LandingPage/Navbar.js";
+import serverAddress from "../../config";
 
 class AddItem extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class AddItem extends Component {
     if (this.props.location.state) {
       axios
         .get(
-          `http://localhost:3001/yelp/menu/categoryById/${this.props.location.state.category_id}`
+          `${serverAddress}/yelp/menu/categoryById/${this.props.location.state.category_id}`
         )
         .then((response) => {
           console.log("response");
@@ -86,7 +87,7 @@ class AddItem extends Component {
     console.log("Add item");
     console.log(data);
     axios
-      .post(`http://localhost:3001/yelp/menu/item`, data)
+      .post(`${serverAddress}/yelp/menu/item`, data)
       .then((response) => {
         console.log("Updated item");
         alert("Item Added!");
@@ -111,7 +112,7 @@ class AddItem extends Component {
     };
     axios
       .post(
-        `http://localhost:3001/yelp/images/item/${this.state.item_id}`,
+        `${serverAddress}/yelp/images/item/${this.state.item_id}`,
         formData,
         config
       )
@@ -148,7 +149,7 @@ class AddItem extends Component {
     var imageSrc;
     var fileText = this.state.file_text || "Choose image..";
     if (this.state) {
-      imageSrc = `http://localhost:3001/yelp/images/item/${this.state.item_image}`;
+      imageSrc = `${serverAddress}/yelp/images/item/${this.state.item_image}`;
     }
     return (
       <div>

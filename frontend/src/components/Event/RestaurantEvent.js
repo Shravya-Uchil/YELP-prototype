@@ -5,6 +5,7 @@ import axios from "axios";
 import { Button, Alert, Col, Row } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class RestaurantEvent extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class RestaurantEvent extends Component {
   componentDidMount() {
     axios
       .get(
-        `http://localhost:3001/yelp/event/restaurant/${localStorage.getItem(
+        `${serverAddress}/yelp/event/restaurant/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -52,7 +53,7 @@ class RestaurantEvent extends Component {
     }
     if (this.state && this.state.allEvents) {
       eventsTag = this.state.allEvents.map((event) => {
-        var imageSrc = `http://localhost:3001/yelp/images/event/${event.event_image}`;
+        var imageSrc = `${serverAddress}/yelp/images/event/${event.event_image}`;
         return (
           <Col sm={3}>
             <Card bg="white" style={{ width: "18rem" }}>

@@ -6,6 +6,7 @@ import axios from "axios";
 import Reviews from "../Restaurant/RestaurantReview.js";
 import ItemCard from "../Restaurant/Item";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class RestaurantHome extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class RestaurantHome extends Component {
   componentWillMount() {
     axios
       .get(
-        `http://localhost:3001/yelp/profile/restaurant/${localStorage.getItem(
+        `${serverAddress}/yelp/profile/restaurant/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -40,7 +41,7 @@ class RestaurantHome extends Component {
   getAllCategories = () => {
     axios
       .get(
-        `http://localhost:3001/yelp/menu/category/${localStorage.getItem(
+        `${serverAddress}/yelp/menu/category/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -62,7 +63,7 @@ class RestaurantHome extends Component {
   getAllMenuItems = () => {
     return axios
       .get(
-        `http://localhost:3001/yelp/menu/items/${localStorage.getItem(
+        `${serverAddress}/yelp/menu/items/${localStorage.getItem(
           "restaurant_id"
         )}`
       )
@@ -120,7 +121,7 @@ class RestaurantHome extends Component {
     }
     if (this.state && this.state.restaurant) {
       let restaurant = this.state.restaurant;
-      let resImageSrc = `http://localhost:3001/yelp/images/restaurant/${this.state.restaurant.restaurant_image}`;
+      let resImageSrc = `${serverAddress}/yelp/images/restaurant/${this.state.restaurant.restaurant_image}`;
       restaurantDetails = (
         <Card
           bg="light"

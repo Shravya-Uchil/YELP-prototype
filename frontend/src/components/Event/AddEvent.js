@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { Redirect } from "react-router";
 import NavBar from "../LandingPage/Navbar.js";
+import serverAddress from "../../config";
 
 class AddEvent extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class AddEvent extends Component {
     console.log("Add event");
     console.log(data);
     axios
-      .post(`http://localhost:3001/yelp/event/event`, data)
+      .post(`${serverAddress}/yelp/event/event`, data)
       .then((response) => {
         console.log("Updated");
         alert("Event Added!");
@@ -79,7 +80,7 @@ class AddEvent extends Component {
     };
     axios
       .post(
-        `http://localhost:3001/yelp/images/event/${this.state.event_id}`,
+        `${serverAddress}/yelp/images/event/${this.state.event_id}`,
         formData,
         config
       )
@@ -112,7 +113,7 @@ class AddEvent extends Component {
     var imageSrc;
     var fileText = this.state.file_text || "Choose image..";
     if (this.state) {
-      imageSrc = `http://localhost:3001/yelp/images/item/${this.state.event_image}`;
+      imageSrc = `${serverAddress}/yelp/images/item/${this.state.event_image}`;
     }
     return (
       <div>

@@ -4,8 +4,6 @@ const bcrypt = require("bcrypt");
 const db = require("../mysqlDB.js");
 
 router.get("/customer/:email_id", (req, res) => {
-  console.log("Get customer details for:");
-  console.log(req.params.email_id);
   let sql_query = `CALL get_user('${req.params.email_id}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
@@ -17,8 +15,6 @@ router.get("/customer/:email_id", (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -28,8 +24,6 @@ router.get("/customer/:email_id", (req, res) => {
 });
 
 router.get("/customerById/:cust_id", (req, res) => {
-  console.log("Get customer details for:");
-  console.log(req.params.cust_id);
   let sql_query = `CALL get_user_byId('${req.params.cust_id}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
@@ -41,8 +35,6 @@ router.get("/customerById/:cust_id", (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -52,7 +44,6 @@ router.get("/customerById/:cust_id", (req, res) => {
 });
 
 router.post("/customer", async (req, res) => {
-  console.log("Update Customer");
   var encryptedPassword = "NULL";
   try {
     if (req.body.password && req.body.password !== "") {
@@ -75,8 +66,6 @@ router.post("/customer", async (req, res) => {
         result.length > 0 &&
         result[0][0].status === "CUSTOMER_UPDATED"
       ) {
-        console.log("Success");
-        console.log(result);
         res.writeHead(200, {
           "Content-Type": "text/plain",
         });
@@ -86,8 +75,6 @@ router.post("/customer", async (req, res) => {
         result.length > 0 &&
         result[0][0].status === "NO_RECORD"
       ) {
-        console.log("No record found:");
-        console.log(result);
         res.writeHead(401, {
           "Content-Type": "text/plain",
         });
@@ -105,11 +92,9 @@ router.post("/customer", async (req, res) => {
 });
 
 router.get("/restaurant/:restaurant_id", (req, res) => {
-  console.log("Get restaurant details for:" + req.params.restaurant_id);
   let sql_query = `CALL get_restaurant_byId('${req.params.restaurant_id}');`;
   db.query(sql_query, (err, result) => {
     if (err) {
-      console.log("Error");
       console.log(err);
       res.writeHead(500, {
         "Content-Type": "text/plain",
@@ -117,8 +102,6 @@ router.get("/restaurant/:restaurant_id", (req, res) => {
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {
-      console.log("Success:");
-      console.log(result);
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
@@ -128,7 +111,6 @@ router.get("/restaurant/:restaurant_id", (req, res) => {
 });
 
 router.post("/restaurant", async (req, res) => {
-  console.log("Update Restaurant");
   var encryptedPassword = "NULL";
   try {
     if (req.body.password && req.body.password !== "") {
@@ -150,8 +132,6 @@ router.post("/restaurant", async (req, res) => {
         result.length > 0 &&
         result[0][0].status === "RESTAURANT_UPDATED"
       ) {
-        console.log("Success:");
-        console.log(result);
         res.writeHead(200, {
           "Content-Type": "text/plain",
         });
@@ -161,8 +141,6 @@ router.post("/restaurant", async (req, res) => {
         result.length > 0 &&
         result[0][0].status === "NO_RECORD"
       ) {
-        console.log("No record found:");
-        console.log(result);
         res.writeHead(401, {
           "Content-Type": "text/plain",
         });

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card, Modal, Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import serverAddress from "../../config";
 
 class Item extends Component {
   constructor(props) {
@@ -170,7 +171,7 @@ class Item extends Component {
       );
     }
     if (this.state) {
-      var imageSrc = `http://localhost:3001/yelp/images/item/${this.props.menu_item.item_image}`;
+      var imageSrc = `${serverAddress}/yelp/images/item/${this.props.menu_item.item_image}`;
     }
     return (
       <div>

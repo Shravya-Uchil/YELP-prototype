@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { customerLogin } from "../../actions/loginActions";
 import NavBar from "../LandingPage/Navbar.js";
+import serverAddress from "../../config";
 
 //Define a Login Component
 class Login extends Component {
@@ -42,7 +43,7 @@ class Login extends Component {
     axios.defaults.withCredentials = true;
     //make a post request with the user data
     axios
-      .post("http://localhost:3001/yelp/login", data)
+      .post("${serverAddress}/yelp/login", data)
       .then((response) => {
         console.log("Status Code : ", response.status);
         if (response.status === 200) {
